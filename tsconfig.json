@@ -1,0 +1,42 @@
+{
+    "files": [
+        "./client/Bulletin.ts",
+        "./package_defs/all-definitions.d.ts",
+        "./package_defs/backbone.d.ts",
+        "./package_defs/bootstrap.d.ts",
+        "./package_defs/collectionfs.d.ts",
+        "./package_defs/d3.d.ts",
+        "./package_defs/errors.d.ts",
+        "./package_defs/flash-messages.d.ts",
+        "./package_defs/google-maps-smart-package.d.ts",
+        "./package_defs/google.maps.d.ts",
+        "./package_defs/handlebars.d.ts",
+        "./package_defs/ironrouter.d.ts",
+        "./package_defs/jquery.d.ts",
+        "./package_defs/lib.d.ts",
+        "./package_defs/meteor.d.ts",
+        "./package_defs/node-fibers.d.ts",
+        "./package_defs/node.d.ts",
+        "./package_defs/observatory.d.ts",
+        "./package_defs/paginated-subscription.d.ts",
+        "./package_defs/roles.d.ts",
+        "./package_defs/smart-collections.d.ts",
+        "./package_defs/underscore.d.ts",
+        "./package_defs/underscore.string.d.ts",
+        "./routes/routes.ts",
+        "./zzz.ts-compiler.ts"
+    ],
+    "filesGlob": [
+        "./**/*.ts"
+    ],
+    "buildOnSave": false,
+    "compileOnSave": false,
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false
+    }
+}
