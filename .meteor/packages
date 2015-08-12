@@ -8,5 +8,6 @@ meteor-platform
 less
 jquery
 iron:router
-meteortypescript:compiler
-meteortypescript:typescript-libs
+coffeescript
+momentjs:moment
+rzymek:moment-locale-zh-tw
