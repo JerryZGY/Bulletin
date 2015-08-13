@@ -5,9 +5,12 @@
 # but you can also edit it by hand.
 
 meteor-platform
+http
 less
 jquery
 iron:router
 coffeescript
+npm-container
+meteorhacks:npm
 momentjs:moment
 rzymek:moment-locale-zh-tw
