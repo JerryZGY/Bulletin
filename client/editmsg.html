@@ -1,0 +1,14 @@
+<template name='editmsg'>
+  <div class='editor'>
+    <div class='container'>
+      {{#with messages}}
+        <div>標題<input type='text' class='msg title' value="{{title}}"/></div>
+        <div>訊息一<input type='text' class='msg msg_1' value="{{msg_1}}"/></div>
+        <div>訊息二<input type='text' class='msg msg_2' value="{{msg_2}}"/></div>
+        <div>訊息三<input type='text' class='msg msg_3' value="{{msg_3}}"/></div>
+        <div>訊息四<input type='text' class='msg msg_4' value="{{msg_4}}"/></div>
+      {{/with}}
+    </div>
+  </div>
+  {{>home}}
+</template>

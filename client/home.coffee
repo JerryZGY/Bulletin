@@ -1,102 +1,66 @@
-dura = 1500
-timeout = 5000
 image = null
 
 Template.home.onCreated ->
   $('body').attr('class', 'home')
-  Meteor.subscribe 'temperature', () ->
-    refreshTemperature()
+  refreshWeatherData()
+  Meteor.subscribe 'weatherdata', ->
+    image = new Image()
+    image.src = WeatherData.findOne()?.imageUrl
+    image.onload = ->
+      $('.onloaded').css({'background-image': "url('#{image.src}')"})
+      $('.preload').addClass('onLoad')
 
 Template.home.onRendered ->
-  deWeatherQueue()
-  getWeatherText()
   updateClock()
+  setTimeout slideLeftAnimation.bind(null, $('.weather'), $('.humidity')), 10000
+  setTimeout slideAnimation.bind(null, $('.msg1'), $('.msg3')), 10000
+  setTimeout slideAnimation.bind(null, $('.msg2'), $('.msg4')), 15000
 
 Template.home.helpers
-  temperatureData: ->
-    return Temperature.findOne()
+  weatherData: ->
+    return WeatherData.findOne()
 
-refreshTemperature = ->
-  Meteor.call 'getTemperature'
+refreshWeatherData = ->
+  Meteor.call 'refreshWeatherData', (e) ->
+    if e then console.log e
 
-deWeatherQueue = ->
-  $('.times').animate({opacity: 0}, {
-    duration: dura
-    queue: 'weatherQueue'
-    complete: ->
-      $('.temp').animate {opacity: 1}, dura
-  }).dequeue('weatherQueue')
+slideLeftAnimation = ($element_1, $element_2) ->
+  $element_1.animate({
+    opacity: 0
+    transform: 'translateX(-1080px)'
+  }, 1000, 'easeInOutQuint').animate {transform:'translateX(1080px)'}, 0
 
-  $('.clock').animate({opacity: 0}, {
-    duration: dura
-    queue: 'weatherQueue'
-    complete: ->
-      $('.weather').animate {opacity: 1}, dura
-      setTimeout deClockQueue, timeout
-  }).dequeue('weatherQueue')
+  $element_2.animate {
+    opacity: 1
+    transform: 'translateX(0px)'
+  }, 1000, 'easeInOutQuint'
 
-deClockQueue = ->
-  $('.temp').animate({opacity: 0}, {
-    duration: dura
-    queue: 'clockQueue'
-    complete: ->
-      $('.times').animate {opacity: 1}, dura
-  }).dequeue('clockQueue')
+  setTimeout slideLeftAnimation.bind(null, $element_2, $element_1), 10000
 
-  $('.weather').animate({opacity: 0}, {
-    duration: dura
-    queue: 'clockQueue'
-    complete: ->
-      $('.clock').animate {opacity: 1}, dura
-      setTimeout deWeatherQueue, timeout
-  }).dequeue('clockQueue')
+slideAnimation = ($element_1, $element_2) ->
+  $element_1.animate({
+    opacity: 0
+    transform: 'translateY(250px)'
+  }, 1000, 'easeInQuint', ->
+    $element_2.animate({
+      opacity: 1
+      transform: 'translateY(0px)'
+    }, 1000, 'easeOutQuint')
+  )
+  setTimeout slideAnimation.bind(null, $element_2, $element_1), 15000
 
 updateClock = ->
   now = moment()
   dateStr = now.format('L')
-  weekdayStr = now.format('dd')
-  timeStr = now.format('hh:mm:ss')
+  weekdayStr = now.format('dddd')
+  timeStr = now.format('a h:mm:ss')
   second = (now.seconds() + now.milliseconds() / 1000) * 6
   minute = now.minutes() * 6 + second / 60
   hour = ((now.hours() % 12) / 12) * 360 + 90 + minute / 12
   $('.hour').css('transform', "rotate(#{hour}deg)")
   $('.minute').css('transform', "rotate(#{minute}deg)")
   $('.second').css('transform', "rotate(#{second}deg)")
-  $('.date').text("#{dateStr}(#{weekdayStr})")
+  $('.date.text').text(dateStr)
+  $('.weekday').text(weekdayStr)
   $('.times').text(timeStr)
   setTimeout(updateClock, 40)
-
-getWeatherText = ->
-  $.ajax {
-    url: "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20%3D%202304389%20and%20u%20%3D%20'c'&format=json&callback=?"
-    dataType: 'json'
-    success: (data) ->
-      weather = data.query.results.channel.item.condition.text
-      setBackground(weather)
-  }
-
-setBackground = (weather) ->
-  image = new Image()
-  apiKey = '4b6f5848ccc585ce0615730fe83dfdc7'
-  groupID = '1463451@N25';
-  photoSize = 'url_h' #url_h, url_o
-  requestUrl = 'https://api.flickr.com/services/rest/?method=flickr.photos.search'
-  requireArguments = "&api_key=#{apiKey}&group_id=#{groupID}&text=#{weather}&extras=#{photoSize}"
-  extraArguments = '&content_type=1&media=photo&format=json'
-  photoUrl = ''
-  $.ajax {
-    url: requestUrl + requireArguments + extraArguments
-    dataType: 'jsonp'
-    jsonp: 'jsoncallback'
-    success: (data) ->
-      photosData = $.grep data.photos.photo, (photo) ->
-        typeof photo[photoSize] == 'string'
-      photosData = $.map photosData, (photo) ->
-        photo[photoSize]
-      selectIndex = Math.floor (Math.random() * photosData.length)
-      photoUrl = photosData[selectIndex]
-      image.src = photoUrl
-      image.onload = ->
-        $('.bg').css 'background-image', "url(#{photoUrl})"
-        $('.bg').addClass 'start'
-  }

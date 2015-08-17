@@ -1,1 +1,3 @@
-@Temperature = new Mongo.Collection 'temperature'
+@WeatherData = new Mongo.Collection 'weatherdata'
+
+@Messages = new Mongo.Collection 'messages'
