@@ -2,11 +2,12 @@
   <div class='editor'>
     <div class='container'>
       {{#with messages}}
-        <div>標題<input type='text' class='msg title' value="{{title}}"/></div>
-        <div>訊息一<input type='text' class='msg msg_1' value="{{msg_1}}"/></div>
-        <div>訊息二<input type='text' class='msg msg_2' value="{{msg_2}}"/></div>
-        <div>訊息三<input type='text' class='msg msg_3' value="{{msg_3}}"/></div>
-        <div>訊息四<input type='text' class='msg msg_4' value="{{msg_4}}"/></div>
+        <div class='title'>標題<textarea id='title'>{{title}}</textarea></div>
+        <div class='msg'>訊息一<textarea id='msg_1'>{{msg_1}}</textarea></div>
+        <div class='msg'>訊息二<textarea id='msg_2'>{{msg_2}}</textarea></div>
+        <div class='msg'>訊息三<textarea id='msg_3'>{{msg_3}}</textarea></div>
+        <div class='msg'>訊息四<textarea id='msg_4'>{{msg_4}}</textarea></div>
+        <div class='apply'><div id='btn'>套用</div></div>
       {{/with}}
     </div>
   </div>

@@ -141,6 +141,7 @@ Meteor.methods
         _id = WeatherData.findOne()._id || {}
         WeatherData.update _id, {$set: weatherData}, {upsert:true}
         cb? null
+        
   updateMsgData: (messages) ->
     _id = Messages.findOne()._id || {}
     Messages.update {}, {$set: messages}, {upsert:true}

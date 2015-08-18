@@ -12,7 +12,7 @@ body.editmsg {
   .editor {
     width: 360px;
     height: 640px;
-    background-color: #50638d;
+    background-color: #50638D;
     z-index: 1;
 
     .container {
@@ -25,14 +25,47 @@ body.editmsg {
       div {
         flex: 1;
 
-        input {
-          background: #60739d;
-          color: #f0e6e6;
+        textarea {
           border: 0;
-          font-size: 20px;
           width: 100%;
-          height: 40px;
+          height: 46px;
           margin: 8px 0;
+          color: #F0E6E6;
+          font-size: 20px;
+          resize: none;
+          background-color: #60739D;
+        }
+
+        &.title textarea {
+          height: 23px;
+        }
+
+        &.apply {
+          padding-top: 40px;
+          text-align: center;
+
+          #btn {
+            width: 100px;
+            height: 40px;
+            margin: 0 auto;
+            color: #F0E6E6;
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 40px;
+            border-radius: 6px;
+            border: 1px solid #4C5F89;
+            background-color: #60739D;
+          }
+
+          #btn:hover {
+            border: 1px solid #384B75;
+            background-color: #4C5F89;
+          }
+
+          #btn:active {
+            border: 1px solid #384B75;
+            background-color: #60739D;
+          }
         }
       }
     }

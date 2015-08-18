@@ -3,6 +3,7 @@ image = null
 Template.home.onCreated ->
   $('body').attr('class', 'home')
   refreshWeatherData()
+  Meteor.subscribe 'messages'
   Meteor.subscribe 'weatherdata', ->
     image = new Image()
     image.src = WeatherData.findOne()?.imageUrl
@@ -19,6 +20,8 @@ Template.home.onRendered ->
 Template.home.helpers
   weatherData: ->
     return WeatherData.findOne()
+  messages: ->
+    return Messages.findOne()
 
 refreshWeatherData = ->
   Meteor.call 'refreshWeatherData', (e) ->
