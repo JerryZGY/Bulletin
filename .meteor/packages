@@ -14,3 +14,4 @@ npm-container
 meteorhacks:npm
 momentjs:moment
 rzymek:moment-locale-zh-tw
+percolate:synced-cron

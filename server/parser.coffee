@@ -2,54 +2,54 @@ cheerio = Meteor.npmRequire 'cheerio'
 async = Meteor.npmRequire 'async'
 
 weatherText = {
-  "0": "tornado" #龍選風
-  "1": "tropical storm" #熱帶風暴
-  "2": "hurricane" #颶風
-  "3": "severe thunderstorms" #強雷陣雨
-  "4": "thunderstorms" #雷陣雨
-  "5": "mixed rain and snow" #雨雪
-  "6": "mixed rain and sleet" #雨霰
-  "7": "mixed snow and sleet" #雪霰
-  "8": "freezing drizzle" #霜濛
-  "9": "drizzle" #濛
-  "10": "freezing rain" #霜雨
-  "11": "showers" #陣雨
-  "12": "showers" #陣雨
-  "13": "snow flurries" #飄雪
-  "14": "light snow showers" #陣雪
-  "15": "blowing snow" #吹雪
-  "16": "snow" #下雪
-  "17": "hail" #冰雹
-  "18": "sleet" #霰
-  "19": "dust" #多塵
-  "20": "foggy" #多霧
-  "21": "haze" #陰霾
-  "22": "smoky" #多煙
-  "23": "blustery" #狂風
-  "24": "windy" #風
-  "25": "cold" #冷
-  "26": "cloudy" #多雲
-  "27": "mostly cloudy (night)" #晴時多雲(夜)
-  "28": "mostly cloudy (day)" #晴時多雲(日)
-  "29": "partly cloudy (night)" #晴時少雲(夜)
-  "30": "partly cloudy (day)" #晴時少雲(日)
-  "31": "clear (night)" #晴空(夜)
-  "32": "sunny" #晴空(日)
-  "33": "fair (night)" #晴朗(夜)
-  "34": "fair (day)" #晴朗(日)
-  "35": "mixed rain and hail" #冰雹雨
-  "36": "hot" #炎熱
-  "37": "isolated thunderstorms" #偶發雷雨
-  "38": "scattered thunderstorms" #零星雷雨
-  "39": "scattered thunderstorms" #零星雷雨
-  "40": "scattered showers" #細雨
-  "41": "heavy snow" #大雪
-  "42": "scattered snow showers" #細雪雨
-  "43": "heavy snow" #大雪
-  "44": "partly cloudy" # 晴時少雲
-  "45": "thundershowers" #雷陣雪
-  "46": "snow showers" #細雪
-  "47": "isolated thundershowers" #偶發雷雪
+  0:  {text: "tornado", current: "龍選風"}
+  1:  {text: "tropical storm", current: "熱帶風暴"}
+  2:  {text: "hurricane", current: "颶風"}
+  3:  {text: "severe thunderstorms", current: "強雷陣雨"}
+  4:  {text: "thunderstorms", current: "雷陣雨"}
+  5:  {text: "mixed rain and snow", current: "雨雪"}
+  6:  {text: "mixed rain and sleet", current: "雨霰"}
+  7:  {text: "mixed snow and sleet", current: "雪霰"}
+  8:  {text: "freezing drizzle", current: "霜濛"}
+  9:  {text: "drizzle", current: "濛"}
+  10: {text: "freezing rain", current: "霜雨"}
+  11: {text: "showers", current: "陣雨"}
+  12: {text: "showers", current: "陣雨"}
+  13: {text: "snow flurries", current: "飄雪"}
+  14: {text: "light snow showers", current: "陣雪"}
+  15: {text: "blowing snow", current: "吹雪"}
+  16: {text: "snow", current: "下雪"}
+  17: {text: "hail", current: "冰雹"}
+  18: {text: "sleet", current: "霰"}
+  19: {text: "dust", current: "多塵"}
+  20: {text: "foggy", current: "多霧"}
+  21: {text: "haze", current: "陰霾"}
+  22: {text: "smoky", current: "多煙"}
+  23: {text: "blustery", current: "狂風"}
+  24: {text: "windy", current: "風"}
+  25: {text: "cold", current: "冷"}
+  26: {text: "cloudy", current: "多雲"}
+  27: {text: "mostly cloudy (night)", current: "晴時多雲"}
+  28: {text: "mostly cloudy (day)", current: "晴時多雲"}
+  29: {text: "partly cloudy (night)", current: "晴時少雲"}
+  30: {text: "partly cloudy (day)", current: "晴時少雲"}
+  31: {text: "clear (night)", current: "晴空"}
+  32: {text: "sunny", current: "晴空"}
+  33: {text: "fair (night)", current: "晴朗"}
+  34: {text: "fair (day)", current: "晴朗"}
+  35: {text: "mixed rain and hail", current: "冰雹雨"}
+  36: {text: "hot", current: "炎熱"}
+  37: {text: "isolated thunderstorms", current: "偶發雷雨"}
+  38: {text: "scattered thunderstorms", current: "零星雷雨"}
+  39: {text: "scattered thunderstorms", current: "零星雷雨"}
+  40: {text: "scattered showers", current: "細雨"}
+  41: {text: "heavy snow", current: "大雪"}
+  42: {text: "scattered snow showers", current: "細雪雨"}
+  43: {text: "heavy snow", current: "大雪"}
+  44: {text: "partly cloudy", current: "晴時少雲"}
+  45: {text: "thundershowers", current: "雷陣雪"}
+  46: {text: "snow showers", current: "細雪"}
+  47: {text: "isolated thundershowers", current: "偶發雷雪"}
 }
 
 getTemperatureAndHumidity = (cb) ->
@@ -61,6 +61,8 @@ getTemperatureAndHumidity = (cb) ->
 
     $ = cheerio.load html
     return {
+      highest:      $("td[class='summary_data']:contains('Outside Temp')").next().next().text().replace /\.\d C/, ''
+      lowest:       $("td[class='summary_data']:contains('Outside Temp')").next().next().next().next().text().replace /\.\d C/, ''
       outsideTemp:  getTextFromHtml 'Outside Temp', /\.\d C/
       insideTemp:   getTextFromHtml 'Inside Temp', /\.\d C/
       extraTemp:    getTextFromHtml 'Extra Temp 2', /\.\d C/
@@ -85,9 +87,9 @@ getWeatherCode = (cb) ->
 
 parseCodeToName = (code) ->
   switch code
-    when 26, 27, 28
+    when 8, 9, 18, 20, 21, 26
       return 'cloudy'
-    when 8, 9, 18, 19, 20, 21, 22, 23, 24, 25, 29, 30, 44
+    when 19, 22, 23, 24, 25, 27, 28, 29, 30, 44
       return 'cloudy_day'
     when 31, 32, 33, 34, 36, 46
       return 'sunny'
@@ -96,12 +98,12 @@ parseCodeToName = (code) ->
     else
       return 'rainy'
 
-getWeatherImageUrl = (weatherText, cb) ->
+getWeatherImageUrl = (text, cb) ->
   apiKey = '4b6f5848ccc585ce0615730fe83dfdc7'
   groupID = '1463451@N25';
   photoSize = 'url_h' #url_h, url_o
   requestUrl = 'https://api.flickr.com/services/rest/?method=flickr.photos.search'
-  requireArguments = "&api_key=#{apiKey}&group_id=#{groupID}&text=#{weatherText}&extras=#{photoSize}"
+  requireArguments = "&api_key=#{apiKey}&group_id=#{groupID}&text=#{text}&extras=#{photoSize}"
   extraArguments = '&content_type=1&media=photo&format=json&nojsoncallback=1'
 
   parsePhotosDataToUrl = (data) ->
@@ -117,32 +119,76 @@ getWeatherImageUrl = (weatherText, cb) ->
     imageUrl = parsePhotosDataToUrl data
     cb null, imageUrl
 
+updateRefreshCron = ->
+  SyncedCron.stop()
+  name = 'refreshWeather'
+  SyncedCron.add
+    name: name
+    schedule: (parser) ->
+      console.log "*** schedule: #{name} is scheduled"
+      parser.text Settings.refreshWeatherFreq
+    job: ->
+      console.log "*** schedule: #{name} is triggered"
+      Meteor.call 'refreshWeather', (e) ->
+        if e then console.log e
+
+  name = 'refreshTempAndHumi'
+  SyncedCron.add
+    name: name
+    schedule: (parser) ->
+      console.log "*** schedule: #{name} is scheduled"
+      parser.text Settings.refreshTempAndHumiFreq
+    job: ->
+      console.log "*** schedule: #{name} is triggered"
+      Meteor.call 'refreshTempAndHumi', (e) ->
+        if e then console.log e
+  SyncedCron.start()
+
 Meteor.methods
-  refreshWeatherData: (cb) ->
-    console.log ">>> refresh WeatherData at #{this.connection?.clientAddress}"
-    async.parallel [
-      getTemperatureAndHumidity
-      getWeatherCode
-    ], (e, r) ->
+  refreshTempAndHumi: (cb) ->
+    console.log ">>> call refreshTempAndHumi"
+    getTemperatureAndHumidity (e, r) ->
       if e then return cb e
-      code = r[1]
-      getWeatherImageUrl weatherText[code], (error, result) ->
+      weatherData = {
+        highest:      r['highest']
+        lowest:       r['lowest']
+        outsideTemp:  r['outsideTemp']
+        insideTemp:   r['insideTemp']
+        extraTemp:    r['extraTemp']
+        outsideHumi:  r['outsideHumi']
+        insideHumi:   r['insideHumi']
+        extraHumi:    r['extraHumi']
+      }
+      _id = WeatherData.findOne()._id || {}
+      WeatherData.update _id, {$set: weatherData}, {upsert:true}
+      cb? null
+
+  refreshWeather: (cb) ->
+    console.log ">>> call refreshWeather"
+    getWeatherCode (e, r) ->
+      if e then return cb e
+      code = r
+      getWeatherImageUrl weatherText[code].text, (error, result) ->
         if error then cb error
         weatherData = {
           weatherName: parseCodeToName code
+          weatherCurrentName: weatherText[code].current
           imageUrl: result
-          outsideTemp:  r[0]['outsideTemp']
-          insideTemp:   r[0]['insideTemp']
-          extraTemp:    r[0]['extraTemp']
-          outsideHumi:  r[0]['outsideHumi']
-          insideHumi:   r[0]['insideHumi']
-          extraHumi:    r[0]['extraHumi']
         }
         _id = WeatherData.findOne()._id || {}
         WeatherData.update _id, {$set: weatherData}, {upsert:true}
         cb? null
-        
+
   updateMsgData: (messages) ->
     _id = Messages.findOne()._id || {}
     Messages.update {}, {$set: messages}, {upsert:true}
     console.log ">>> message updated at #{this.connection?.clientAddress}"
+
+  name: (name = 'cloudy') ->
+    #cloudy, cloudy_day, rainy, strom, sunny
+    _id = WeatherData.findOne()._id || {}
+    WeatherData.update _id, {$set: {weatherName: name}}, {upsert:true}
+    return "changed to #{name}"
+
+Meteor.startup ->
+  updateRefreshCron()

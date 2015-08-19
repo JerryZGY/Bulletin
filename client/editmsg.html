@@ -2,8 +2,8 @@
   <div class='editor'>
     <div class='container'>
       {{#with messages}}
-        <div class='title'>標題<textarea id='title'>{{title}}</textarea></div>
-        <div class='msg'>訊息一<textarea id='msg_1'>{{msg_1}}</textarea></div>
+        <div class='title'>標題<input id='title' value="{{title}}" maxlength='20'/></div>
+        <div class='msg'>訊息一<textarea id='msg_1'  maxlength='40'>{{msg_1}}</textarea></div>
         <div class='msg'>訊息二<textarea id='msg_2'>{{msg_2}}</textarea></div>
         <div class='msg'>訊息三<textarea id='msg_3'>{{msg_3}}</textarea></div>
         <div class='msg'>訊息四<textarea id='msg_4'>{{msg_4}}</textarea></div>
@@ -12,4 +12,10 @@
     </div>
   </div>
   {{>home}}
+  <div class='env'>
+    <span class='refreshTempAndHumiFreq'></span>
+    <span class='refreshWeatherFreq'></span>
+    <span class='fadeAnimationTimeout'></span>
+    <span class='fadeAnimationDuration'></span>
+  </div>
 </template>

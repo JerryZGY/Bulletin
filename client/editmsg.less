@@ -25,7 +25,7 @@ body.editmsg {
       div {
         flex: 1;
 
-        textarea {
+        textarea, input {
           border: 0;
           width: 100%;
           height: 46px;
@@ -34,9 +34,10 @@ body.editmsg {
           font-size: 20px;
           resize: none;
           background-color: #60739D;
+          overflow: hidden;
         }
 
-        &.title textarea {
+        &.title input {
           height: 23px;
         }
 
@@ -69,5 +70,13 @@ body.editmsg {
         }
       }
     }
+  }
+
+  .env {
+    z-index: 1;
+    left: 730px;
+    width: 300px;
+    height: 640px;
+    position: absolute;
   }
 }

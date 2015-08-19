@@ -1,5 +1,11 @@
+{refreshTempAndHumiFreq, refreshWeatherFreq, fadeTimeout, fadeDuration} = @
+
 Template.editmsg.onRendered ->
   $('body').attr('class', 'editmsg')
+  $('.refreshTempAndHumiFreq').text("refreshTempAndHumiFreq: #{refreshTempAndHumiFreq}")
+  $('.refreshWeatherFreq').text("refreshWeatherFreq: #{refreshWeatherFreq}")
+  $('.fadeAnimationTimeout').text("fadeAnimationTimeout: #{fadeTimeout} ms")
+  $('.fadeAnimationDuration').text("fadeAnimationDuration: #{fadeDuration} ms")
   Meteor.subscribe 'messages'
 
 Template.editmsg.helpers

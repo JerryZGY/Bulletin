@@ -26,7 +26,7 @@ html {
         background-image: url('bg.jpg');
         background-size: cover;
         background-repeat: no-repeat;
-        transition: opacity 5s ease-out;
+        transition: opacity 3s ease-out;
         .filter(brightness(0.3));
 
         &.onloaded {
@@ -34,7 +34,7 @@ html {
           background-image: none;
         }
 
-        &.onLoad {
+        &.isloading {
           opacity: 0;
         }
       }
@@ -47,10 +47,10 @@ html {
 
       .clock {
         position: relative;
-        display: flex;
+        .flex-display();
 
         .graph {
-          flex: 1;
+          .flex(1);
 
           .ring {
             width: 452px;
@@ -99,9 +99,9 @@ html {
         }
 
         .worth {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
+          .flex(1);
+          .flex-display();
+          .flex-direction(column);
 
           .date {
             padding: 100px 0 0;
@@ -116,7 +116,7 @@ html {
           }
 
           span {
-            flex: 1;
+            .flex(1);
             color: #FFF;
             font-size: 65px;
             text-align: center;
@@ -124,74 +124,169 @@ html {
         }
       }
 
-      .weather, .humidity {
+      .data {
         opacity: 1;
-        display: flex;
+        .flex-display();
         position: absolute;
 
         .graph {
-          flex: 1;
-          background-size: 350px;
-          background-position: center;
-          background-repeat: no-repeat;
+          .flex(1);
+          color: #FFF;
+          .flex-display();
+          text-align: center;
+          .flex-direction(column);
+
+          .weatherIcon {
+            height: 300px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: opacity 0.3s ease-out;
+
+            &.cloudy {
+              opacity: 1;
+              background-image: url('material/cloudy.png');
+            }
+
+            &.cloudy_day {
+              opacity: 1;
+              background-image: url('material/cloudy_day.png');
+            }
+
+            &.rainy {
+              opacity: 1;
+              background-image: url('material/rainy.png');
+            }
+
+            &.storm {
+              opacity: 1;
+              background-image: url('material/storm.png');
+            }
+
+            &.sunny {
+              opacity: 1;
+              background-image: url('material/sunny.png');
+            }
+
+            &.updating {
+              opacity: 0;
+            }
+          }
+
+          .weatherName {
+            font-size: 65px;
+            line-height: 75px;
+            text-align: center;
+            margin: 10px 0;
+          }
+
+          .extraDesc {
+            width: 70%;
+            .flex-display();
+            margin: 0px auto;
+            position: relative;
+
+            .highest {
+              background-image: url('material/highest.png');
+            }
+
+            .lowest {
+              background-image: url('material/lowest.png');
+            }
+
+            div {
+              .flex(0.5);
+              background-size: contain;
+              background-position: center;
+              background-repeat: no-repeat;
+            }
+
+            span {
+              .flex(1);
+              font-size: 45px;
+            }
+          }
         }
 
         .worth {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-
-          .out {
-            padding: 100px 0 0;
-          }
-
-          .in {
-            padding: 40px 0;
-          }
-
-          .extra {
-            padding: 0 0 100px
-          }
+          .flex(1);
+          .flex-display();
+          position: relative;
 
           span {
-            flex: 1;
+            .flex(1);
             color: #FFF;
             font-size: 65px;
-            padding: 50px 0;
-            text-align: center;
-          }
-        }
-      }
-
-      .weather {
-        .graph {
-          &.cloudy {
-            background-image: url('material/cloudy.png');
+            line-height: 60px;
           }
 
-          &.cloudy_day {
-            background-image: url('material/cloudy_day.png');
+          .subtitle, .content {
+            .flex(1);
+            .flex-display();
+            position: relative;
+            .flex-direction(column);
+
+            .icon {
+              top: 20px;
+              width: 78px;
+              height: 78px;
+              position: absolute;
+              background-size: contain;
+            }
+
+            .out {
+              padding: 135px 0 0;
+            }
+
+            .in {
+              padding: 40px 0;
+            }
+
+            .extra {
+              padding: 0 0 45px
+            }
           }
 
-          &.rainy {
-            background-image: url('material/rainy.png');
+          .subtitle {
+            .icon {
+              right: 26px;
+              background-image: url('material/location.png');
+            }
+            span {
+              text-align: right;
+            }
           }
 
-          &.storm {
-            background-image: url('material/storm.png');
+          .content {
+            .fix {
+              margin-left: -25px;
+
+              .temperature, .humidity {
+                width: 100%;
+                height: 100%;
+                .flex-display();
+                position: absolute;
+                text-align: center;
+                .flex-direction(column);
+
+                .icon {
+                  margin-left: 85px;
+                }
+              }
+
+              .temperature {
+                .icon {
+                  background-image: url('material/temperature.png');
+                }
+              }
+
+              .humidity {
+                .icon {
+                  background-image: url('material/humidity.png');
+                }
+              }
+            }
           }
-
-          &.sunny {
-            background-image: url('material/sunny.png');
-          }
-        }
-      }
-
-      .humidity {
-        transform: translateX(1080px);
-
-        .graph {
-          background-image: url('material/humidity.png');
         }
       }
 
@@ -204,27 +299,30 @@ html {
         .title {
           width: 1000px;
           height: 150px;
-          display: flex;
+          .flex-display();
           position: relative;
 
           .icon {
-            flex: none;
-            width: 150px;
-            height: 150px;
+            .flex(none);
+            width: 80px;
+            height: 80px;
+            margin: 45px 0px;
             background-size: contain;
             background-image: url("material/message.png");
           }
 
           .word {
-            flex: 1;
+            .flex(1);
+            height: 70px;
             font-size: 70px;
             text-align: left;
-            padding: 35px 0px 35px 30px;
+            overflow: hidden;
+            line-height: 90px;
+            padding: 35px 0px 35px 20px;
           }
         }
 
         .content {
-          top: 15px;
           width: 1000px;
           display: block;
           font-size: 60px;
@@ -233,9 +331,11 @@ html {
           margin-top: 60px;
 
           span {
-            position: absolute;
+            width: 100%;
             height: 140px;
             overflow: hidden;
+            position: absolute;
+            word-wrap: break-word;
 
             &.msg3, &.msg4 {
               opacity: 0;

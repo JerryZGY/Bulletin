@@ -17,30 +17,50 @@
         </div>
       </div>
       <div class='worth'>
-        <span class='date'>2015年8月14日</span>
-        <span class='weekday'>星期五</span>
-        <span class='times'>09:06:20</span>
+        <span class='date'></span>
+        <span class='weekday'></span>
+        <span class='times'></span>
       </div>
     </div>
-    <div class='container weather'>
-      {{#with weatherData}}
-        <div class='graph {{weatherName}}'></div>
-        <div class='worth'>
-          <span class='out'>室外 {{outsideTemp}}°C</span>
-          <span class='in'>室內 {{insideTemp}}°C</span>
-          <span class='extra'>機房 {{extraTemp}}°C</span>
+    <div class='container data'>
+      <div class='graph'>
+        <div class='weatherIcon'></div>
+        <div class='weatherName'>{{weatherData.weatherCurrentName}}</div>
+        <div class='extraDesc'>
+          <div class='highest'></div>
+          <span>
+            {{weatherData.highest}}℃
+          </span>
+          <div class='lowest'></div>
+          <span>
+            {{weatherData.lowest}}℃
+          </span>
         </div>
-      {{/with}}
-    </div>
-    <div class='container humidity'>
-      {{#with weatherData}}
-        <div class='graph'></div>
-        <div class='worth'>
-          <span class='out'>室外 {{outsideHumi}}%</span>
-          <span class='in'>室內 {{insideHumi}}%</span>
-          <span class='extra'>機房 {{extraHumi}}%</span>
+      </div>
+      <div class='worth'>
+        <div class='subtitle'>
+          <div class='icon'></div>
+          <span class='out'>室外</span>
+          <span class='in'>室內</span>
+          <span class='extra'>機房</span>
         </div>
-      {{/with}}
+        <div class='content'>
+          <div class='fix'>
+            <div class='temperature'>
+              <div class='icon'></div>
+              <span class='out'>&nbsp;{{weatherData.outsideTemp}}℃</span>
+              <span class='in'>&nbsp;{{weatherData.insideTemp}}℃</span>
+              <span class='extra'>&nbsp;{{weatherData.extraTemp}}℃</span>
+            </div>
+            <div class='humidity'>
+              <div class='icon'></div>
+              <span class='out'>&nbsp;{{weatherData.outsideHumi}}%</span>
+              <span class='in'>&nbsp;{{weatherData.insideHumi}}%</span>
+              <span class='extra'>&nbsp;{{weatherData.extraHumi}}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class='container message'>
       <div class='title'>
