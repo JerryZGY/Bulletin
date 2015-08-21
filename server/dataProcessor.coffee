@@ -1,5 +1,7 @@
 cheerio = Meteor.npmRequire 'cheerio'
 async = Meteor.npmRequire 'async'
+refreshWeatherFreq = Settings.refreshWeatherFreq
+refreshTempAndHumiFreq = Settings.refreshTempAndHumiFreq
 
 weatherText = {
   0:  {text: "tornado", current: "龍選風"}
@@ -126,7 +128,7 @@ updateRefreshCron = ->
     name: name
     schedule: (parser) ->
       console.log "*** schedule: #{name} is scheduled"
-      parser.text Settings.refreshWeatherFreq
+      parser.text refreshWeatherFreq
     job: ->
       console.log "*** schedule: #{name} is triggered"
       Meteor.call 'refreshWeather', (e) ->
@@ -137,7 +139,7 @@ updateRefreshCron = ->
     name: name
     schedule: (parser) ->
       console.log "*** schedule: #{name} is scheduled"
-      parser.text Settings.refreshTempAndHumiFreq
+      parser.text refreshTempAndHumiFreq
     job: ->
       console.log "*** schedule: #{name} is triggered"
       Meteor.call 'refreshTempAndHumi', (e) ->
@@ -158,8 +160,9 @@ Meteor.methods
         outsideHumi:  r['outsideHumi']
         insideHumi:   r['insideHumi']
         extraHumi:    r['extraHumi']
+        tempAndHumiModifiedAt: new Date()
       }
-      _id = WeatherData.findOne()._id || {}
+      _id = WeatherData.findOne() || {}
       WeatherData.update _id, {$set: weatherData}, {upsert:true}
       cb? null
 
@@ -174,21 +177,16 @@ Meteor.methods
           weatherName: parseCodeToName code
           weatherCurrentName: weatherText[code].current
           imageUrl: result
+          weatherModifiedAt: new Date()
         }
-        _id = WeatherData.findOne()._id || {}
+        _id = WeatherData.findOne() || {}
         WeatherData.update _id, {$set: weatherData}, {upsert:true}
         cb? null
 
   updateMsgData: (messages) ->
-    _id = Messages.findOne()._id || {}
+    _id = Messages.findOne() || {}
     Messages.update {}, {$set: messages}, {upsert:true}
     console.log ">>> message updated at #{this.connection?.clientAddress}"
-
-  name: (name = 'cloudy') ->
-    #cloudy, cloudy_day, rainy, strom, sunny
-    _id = WeatherData.findOne()._id || {}
-    WeatherData.update _id, {$set: {weatherName: name}}, {upsert:true}
-    return "changed to #{name}"
 
 Meteor.startup ->
   updateRefreshCron()

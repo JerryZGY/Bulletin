@@ -1,24 +1,120 @@
 image = new Image()
-fadeTimeout = Settings.fadeTimeout
-fadeDuration = Settings.fadeDuration
+index = null
+fadeInterval = null
+progressInterval = null
+msgDOM_Ary = ['.msg1', '.msg2', '.msg3']
+fadeDOM_Ary = ['.temperature > .icon', '.humidity > .icon']
+data = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+cAD = Settings.currentAnimateDuration #currentAnimateDuration
+aD = Settings.animateDuration #animateDuration
+bD = Settings.bufferDuration #bufferDuration
+rD = (cAD - aD - bD) #restoreDuration
+
+
+TweenLite.ticker.useRAF true
+TweenLite.defaultEase = Power4.easeOut
+
+progressAnimation = (duration = aD) ->
+  TweenLite.to '.progressBar', duration, {
+    opacity: 1
+    height: 415
+    ease: Power1.easeInOut
+    onComplete: ->
+      restoreProgressAnimation()
+      slideAnimation()
+  }
+
+restoreProgressAnimation = ->
+  TweenLite.to '.progressBar', rD, {
+    opacity: 0.5
+    height: 0
+    onComplete: ->
+      progressInterval = setInterval(calibrateProgressInterval, 10)
+  }
+
+slideAnimation = ->
+  calibrateMsgData()
+  TweenLite.fromTo msgDOM_Ary[0], 1, {opacity: 1, y: 0}, {opacity: 0, y: -200}
+  TweenLite.fromTo msgDOM_Ary[1], 1, {y: 200}, {y: 0}
+  TweenLite.fromTo msgDOM_Ary[2], 1, {opacity: 0, y: 400}, {opacity: 1, y: 200}
+  calibrateMsgDOM()
+  index++
+  if index == data.length then index = 0
+
+calibrateMsgData = ->
+  offset_1 = index + 1
+  if offset_1 == data.length then offset_1 = 0
+  offset_2 = offset_1 + 1
+  if offset_2 == data.length then offset_2 = 0
+  $(msgDOM_Ary[0]).text(data[index])
+  $(msgDOM_Ary[1]).text(data[offset_1])
+  $(msgDOM_Ary[2]).text(data[offset_2])
+
+calibrateProgressInterval = ->
+  if moment().second() % cAD == 0
+    clearInterval progressInterval
+    progressAnimation()
+
+calibrateMsgDOM = (status) ->
+  if status == 1 || status == null
+    [msgDOM_Ary[0], msgDOM_Ary[1], msgDOM_Ary[2]] = [msgDOM_Ary[1], msgDOM_Ary[2], msgDOM_Ary[0]]
+  else if status == 2
+    [msgDOM_Ary[0], msgDOM_Ary[1], msgDOM_Ary[2]] = [msgDOM_Ary[2], msgDOM_Ary[0], msgDOM_Ary[1]]
+
+iconFadeAnimation = (duration = aD) ->
+  TweenLite.to fadeDOM_Ary[0], duration, {opacity: 0.5, onComplete: fadeAnimation}
+
+fadeAnimation = ->
+  TweenLite.to $(fadeDOM_Ary[0]).parent(), rD, {opacity:0, onComplete: -> TweenLite.set fadeDOM_Ary[0], {opacity: 1}}
+  TweenLite.to $(fadeDOM_Ary[1]).parent(), rD, {opacity:1, onComplete: -> fadeInterval = setInterval(calibrateFadeInterval, 10)}
+
+calibrateFadeInterval = ->
+  if moment().second() % cAD == 0
+    clearInterval fadeInterval
+    calibrateFadeDOM()
+    iconFadeAnimation()
+
+calibrateFadeDOM = ->
+  [fadeDOM_Ary[0], fadeDOM_Ary[1]] = [fadeDOM_Ary[1], fadeDOM_Ary[0]]
+
+initFadeAnimation = ->
+  sec = moment().second()
+  status = parseInt(sec / cAD) % 2
+  currentSec = sec % cAD
+  duration = aD - currentSec
+  if status == 1 then calibrateFadeDOM()
+  TweenLite.set $(fadeDOM_Ary[0]).parent(), {opacity: 1}
+  TweenLite.set $(fadeDOM_Ary[1]).parent(), {opacity: 0}
+  iconFadeAnimation(duration)
+
+initSlideAnimation = ->
+  min = moment().minutes()
+  sec = moment().second()
+  status = parseInt(sec / cAD) % 3
+  currentSec = sec % cAD
+  duration = aD - currentSec
+  index = parseInt((min * 60 + sec) / cAD) % data.length
+  calibrateMsgDOM(status)
+  calibrateMsgData()
+  TweenLite.set msgDOM_Ary[0], {opacity: 1, y: 0}
+  TweenLite.set msgDOM_Ary[1], {opacity: 1, y: 200}
+  TweenLite.set msgDOM_Ary[2], {opacity: 0, y: 400}
+  progressAnimation(duration)
 
 Template.home.onCreated ->
-  TweenLite.ticker.useRAF false
-  $('body').attr('class', 'home')
   Meteor.subscribe 'messages'
   Meteor.subscribe 'weatherdata', ->
     initWeatherIcon()
+    updateBackground WeatherData.findOne().imageUrl
     WeatherData.find().observe
       changed: (newDoc, oldDoc) ->
-        if newDoc.imageUrl != oldDoc.imageUrl
-          updateBackground newDoc.imageUrl
-        if newDoc.weatherName != oldDoc.weatherName
-          updateWeatherIcon oldDoc.weatherName, newDoc.weatherName
-
+        if newDoc.imageUrl != oldDoc.imageUrl then updateBackground newDoc.imageUrl
+        if newDoc.weatherName != oldDoc.weatherName then updateWeatherIcon oldDoc.weatherName, newDoc.weatherName
 
 Template.home.onRendered ->
   updateClock()
-  updateAnimate()
+  initFadeAnimation()
+  initSlideAnimation()
 
 Template.home.helpers
   weatherData: ->
@@ -48,51 +144,6 @@ updateWeatherIcon = (oldDoc, newDoc) ->
     $('.weatherIcon').addClass "#{newDoc}"
     $('.weatherIcon').removeClass 'updating'
   , 250
-
-initFadeAnimation = ($element_1, $element_2, sec) ->
-  status = parseInt(sec / 10) % 2
-  currentSec = parseInt(sec % 10)
-  duration = (fadeTimeout / 1000) - currentSec
-  animateOpacityPerFrame = 0.5 / (fadeTimeout / 1000)
-  currentOpacity = duration * animateOpacityPerFrame
-  if status == 1 then [$element_1, $element_2] = [$element_2, $element_1]
-  $element_1.css {opacity: 1}
-  $element_1.children('.icon').css {opacity: currentOpacity}
-  $element_1.children('.icon').animate {opacity: 0.5}, duration * 1000
-  $element_2.css {opacity: 0}
-  $element_2.children('.icon').css {opacity: 0}
-
-fadeAnimation = ($element_1, $element_2, sec) ->
-  if sec
-    status = parseInt(sec / 10) % 2
-    if status == 1 then [$element_1, $element_2] = [$element_2, $element_1]
-  setTimeout fadeAnimation.bind(null, $element_2, $element_1), fadeTimeout
-  $element_1.finish().animate({
-    opacity: 0
-  }, fadeDuration, 'easeInOutQuint')
-
-  $element_2.children('.icon').animate {opacity: 1}, fadeDuration
-  $element_2.finish().animate {
-    opacity: 1
-  }, fadeDuration, 'easeInOutQuint', ->
-    $element_2.children('.icon').animate {opacity: 0}, fadeTimeout
-
-slideAnimation = ($element_1, $element_2) ->
-  $element_1.animate({
-    opacity: 0
-    transform: 'translateY(250px)'
-  }, 1000, 'easeInQuint', ->
-    $element_2.animate({
-      opacity: 1
-      transform: 'translateY(0px)'
-    }, 1000, 'easeOutQuint')
-  )
-
-updateAnimate = ->
-  sec = moment().second()
-  offset = ((fadeTimeout / 1000) - sec % 10) * 1000
-  initFadeAnimation $('.temperature'), $('.humidity'), sec
-  setTimeout fadeAnimation.bind(null, $('.temperature'), $('.humidity'), sec), offset
 
 updateClock = ->
   now = moment()
