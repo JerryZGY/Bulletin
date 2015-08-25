@@ -12,20 +12,29 @@ Template.editmsg.onRendered ->
       }
     else
       seq = messages.msgs.length
-    console.log messages
-    console.log 'seq', seq
 
 Template.editmsg.helpers
   messages: ->
     return Messages.findOne()
+  content: ->
+    msgs = {}
+    if Messages.findOne()
+      msgs = Messages.findOne().msgs.map (v, i)->
+        return {
+          msg: v
+          seq: i
+        }
+    return msgs
   refreshTempAndHumiFreq: ->
     return Settings.refreshTempAndHumiFreq
   refreshWeatherFreq: ->
     return Settings.refreshWeatherFreq
-  fadeAnimationTimeout: ->
-    return Settings.fadeTimeout
-  fadeAnimationDuration: ->
-    return Settings.fadeDuration
+  currentAnimateDuration: ->
+    return Settings.currentAnimateDuration
+  animateDuration: ->
+    return Settings.animateDuration
+  bufferDuration: ->
+    return Settings.bufferDuration
   weatherData: ->
     return WeatherData.findOne()
 
@@ -38,32 +47,13 @@ Template.editmsg.events
       Meteor.call 'updateMsgData', messages
 
   'click .add': ->
-    messages.msgs[seq] = {
-      seq: seq
-    }
+    messages.msgs[seq] = ''
     seq++
     Meteor.call 'updateMsgData', messages
 
   'click .apply': ->
     messages['title'] = $('#title').val()
-    messages.msgs.forEach (item, i) ->
-      item['content'] = $("#msg_#{i}").val()
+    messages.msgs = messages.msgs.map (v, i) ->
+      return $("#msg_#{i}").val()
     messages['modifiedAt'] = new Date()
     Meteor.call 'updateMsgData', messages
-###
-messages = {
-  title: '追單'
-  msg: [
-    {
-      seq: 0
-      content: '韓國WEBPAT'
-    }
-    {
-      seq: 1
-      content: '台灣WEBPAT'
-    }
-  ]
-  modifiedAt: 2015-08-25
-}
-
-###

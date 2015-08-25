@@ -3,8 +3,8 @@
     <div class='container'>
       <div class='title'>標題<input id='title' value="{{messages.title}}" maxlength='20'/></div>
       {{#with messages}}
-        {{#each messages.msgs}}
-          <div class='msg'>訊息{{seq}}<textarea id='msg_{{seq}}' maxlength='40'>{{content}}</textarea></div>
+        {{#each content}}
+          <div class='msg'>訊息{{seq}}<textarea id='msg_{{seq}}' maxlength='40'>{{msg}}</textarea></div>
         {{/each}}
       {{/with}}
         <div class='controls'>
@@ -20,7 +20,8 @@
     <span>tempAndHumiModifiedAt: {{formatDate weatherData.tempAndHumiModifiedAt}}</span>
     <span>refreshWeatherFreq: {{refreshWeatherFreq}}</span>
     <span>weatherModifiedAt: {{formatDate weatherData.weatherModifiedAt}}</span>
-    <span>fadeAnimationTimeout: {{fadeAnimationTimeout}} ms</span>
-    <span>fadeAnimationDuration: {{fadeAnimationDuration}} ms</span>
+    <span>currentAnimateDuration: {{currentAnimateDuration}} s</span>
+    <span>animateDuration: {{animateDuration}} s</span>
+    <span>bufferDuration: {{bufferDuration}} s</span>
   </div>
 </template>

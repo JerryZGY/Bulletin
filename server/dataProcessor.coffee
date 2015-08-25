@@ -123,25 +123,25 @@ getWeatherImageUrl = (text, cb) ->
 
 updateRefreshCron = ->
   SyncedCron.stop()
-  name = 'refreshWeather'
+  name_weather = 'refreshWeather'
   SyncedCron.add
-    name: name
+    name: name_weather
     schedule: (parser) ->
-      console.log "*** schedule: #{name} is scheduled"
+      console.log "*** schedule: #{name_weather} is scheduled"
       parser.text refreshWeatherFreq
     job: ->
-      console.log "*** schedule: #{name} is triggered"
+      console.log "*** schedule: #{name_weather} is triggered"
       Meteor.call 'refreshWeather', (e) ->
         if e then console.log e
 
-  name = 'refreshTempAndHumi'
+  name_tempandhumi = 'refreshTempAndHumi'
   SyncedCron.add
-    name: name
+    name: name_tempandhumi
     schedule: (parser) ->
-      console.log "*** schedule: #{name} is scheduled"
+      console.log "*** schedule: #{name_tempandhumi} is scheduled"
       parser.text refreshTempAndHumiFreq
     job: ->
-      console.log "*** schedule: #{name} is triggered"
+      console.log "*** schedule: #{name_tempandhumi} is triggered"
       Meteor.call 'refreshTempAndHumi', (e) ->
         if e then console.log e
   SyncedCron.start()

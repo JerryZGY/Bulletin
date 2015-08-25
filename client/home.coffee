@@ -4,7 +4,8 @@ fadeInterval = null
 progressInterval = null
 msgDOM_Ary = ['.msg1', '.msg2', '.msg3']
 fadeDOM_Ary = ['.temperature > .icon', '.humidity > .icon']
-data = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+data = []
+isSlideAnimationOn = false
 cAD = Settings.currentAnimateDuration #currentAnimateDuration
 aD = Settings.animateDuration #animateDuration
 bD = Settings.bufferDuration #bufferDuration
@@ -15,14 +16,15 @@ TweenLite.ticker.useRAF true
 TweenLite.defaultEase = Power4.easeOut
 
 progressAnimation = (duration = aD) ->
-  TweenLite.to '.progressBar', duration, {
-    opacity: 1
-    height: 415
-    ease: Power1.easeInOut
-    onComplete: ->
-      restoreProgressAnimation()
-      slideAnimation()
-  }
+  if isSlideAnimationOn
+    TweenLite.to '.progressBar', duration, {
+      opacity: 1
+      height: 415
+      ease: Power1.easeInOut
+      onComplete: ->
+        restoreProgressAnimation()
+        slideAnimation()
+    }
 
 restoreProgressAnimation = ->
   TweenLite.to '.progressBar', rD, {
@@ -33,13 +35,14 @@ restoreProgressAnimation = ->
   }
 
 slideAnimation = ->
-  calibrateMsgData()
-  TweenLite.fromTo msgDOM_Ary[0], 1, {opacity: 1, y: 0}, {opacity: 0, y: -200}
-  TweenLite.fromTo msgDOM_Ary[1], 1, {y: 200}, {y: 0}
-  TweenLite.fromTo msgDOM_Ary[2], 1, {opacity: 0, y: 400}, {opacity: 1, y: 200}
-  calibrateMsgDOM()
-  index++
-  if index == data.length then index = 0
+  if isSlideAnimationOn
+    calibrateMsgData()
+    TweenLite.fromTo msgDOM_Ary[0], 1, {opacity: 1, y: 0}, {opacity: 0, y: -200}
+    TweenLite.fromTo msgDOM_Ary[1], 1, {y: 200}, {y: 0}
+    TweenLite.fromTo msgDOM_Ary[2], 1, {opacity: 0, y: 400}, {opacity: 1, y: 200}
+    calibrateMsgDOM()
+    index++
+    if index == data.length then index = 0
 
 calibrateMsgData = ->
   offset_1 = index + 1
@@ -47,8 +50,8 @@ calibrateMsgData = ->
   offset_2 = offset_1 + 1
   if offset_2 == data.length then offset_2 = 0
   $(msgDOM_Ary[0]).text(data[index])
-  $(msgDOM_Ary[1]).text(data[offset_1])
-  $(msgDOM_Ary[2]).text(data[offset_2])
+  if data.length > 1 then $(msgDOM_Ary[1]).text(data[offset_1])
+  if data.length > 2 then $(msgDOM_Ary[2]).text(data[offset_2])
 
 calibrateProgressInterval = ->
   if moment().second() % cAD == 0
@@ -56,10 +59,11 @@ calibrateProgressInterval = ->
     progressAnimation()
 
 calibrateMsgDOM = (status) ->
-  if status == 1 || status == null
-    [msgDOM_Ary[0], msgDOM_Ary[1], msgDOM_Ary[2]] = [msgDOM_Ary[1], msgDOM_Ary[2], msgDOM_Ary[0]]
-  else if status == 2
-    [msgDOM_Ary[0], msgDOM_Ary[1], msgDOM_Ary[2]] = [msgDOM_Ary[2], msgDOM_Ary[0], msgDOM_Ary[1]]
+  if isSlideAnimationOn
+    if status == 1 || status == null
+      [msgDOM_Ary[0], msgDOM_Ary[1], msgDOM_Ary[2]] = [msgDOM_Ary[1], msgDOM_Ary[2], msgDOM_Ary[0]]
+    else if status == 2
+      [msgDOM_Ary[0], msgDOM_Ary[1], msgDOM_Ary[2]] = [msgDOM_Ary[2], msgDOM_Ary[0], msgDOM_Ary[1]]
 
 iconFadeAnimation = (duration = aD) ->
   TweenLite.to fadeDOM_Ary[0], duration, {opacity: 0.5, onComplete: fadeAnimation}
@@ -93,7 +97,9 @@ initSlideAnimation = ->
   status = parseInt(sec / cAD) % 3
   currentSec = sec % cAD
   duration = aD - currentSec
-  index = parseInt((min * 60 + sec) / cAD) % data.length
+  data = Messages.findOne().msgs
+  isSlideAnimationOn = data.length > 2
+  if isSlideAnimationOn then index =  parseInt((min * 60 + sec) / cAD) % data.length else index =  0
   calibrateMsgDOM(status)
   calibrateMsgData()
   TweenLite.set msgDOM_Ary[0], {opacity: 1, y: 0}
@@ -102,7 +108,6 @@ initSlideAnimation = ->
   progressAnimation(duration)
 
 Template.home.onCreated ->
-  Meteor.subscribe 'messages'
   Meteor.subscribe 'weatherdata', ->
     initWeatherIcon()
     updateBackground WeatherData.findOne().imageUrl
@@ -114,7 +119,13 @@ Template.home.onCreated ->
 Template.home.onRendered ->
   updateClock()
   initFadeAnimation()
-  initSlideAnimation()
+  Meteor.subscribe 'messages', ->
+    data = Messages.findOne().msgs
+    initSlideAnimation()
+    Messages.find().observe
+      changed: ->
+        data = Messages.findOne().msgs
+        initSlideAnimation()
 
 Template.home.helpers
   weatherData: ->
