@@ -1,6 +1,19 @@
+messages = null
+seq = 0
+
 Template.editmsg.onRendered ->
   $('body').attr('class', 'editmsg')
-  Meteor.subscribe 'messages'
+  Meteor.subscribe 'messages', ->
+    messages = Messages.findOne()
+    if !messages
+      messages = {
+        title: ''
+        msgs: []
+      }
+    else
+      seq = messages.msgs.length
+    console.log messages
+    console.log 'seq', seq
 
 Template.editmsg.helpers
   messages: ->
@@ -17,13 +30,40 @@ Template.editmsg.helpers
     return WeatherData.findOne()
 
 Template.editmsg.events
-  'click #btn': ->
-    messages = {
-      title: $('#title').val()
-      msg_1: $('#msg_1').val()
-      msg_2: $('#msg_2').val()
-      msg_3: $('#msg_3').val()
-      msg_4: $('#msg_4').val()
-      modifiedAt: new Date()
+  'click .remove': ->
+    if seq != 0
+      delete messages.msgs[seq]
+      seq--
+      messages.msgs.length = seq
+      Meteor.call 'updateMsgData', messages
+
+  'click .add': ->
+    messages.msgs[seq] = {
+      seq: seq
     }
+    seq++
     Meteor.call 'updateMsgData', messages
+
+  'click .apply': ->
+    messages['title'] = $('#title').val()
+    messages.msgs.forEach (item, i) ->
+      item['content'] = $("#msg_#{i}").val()
+    messages['modifiedAt'] = new Date()
+    Meteor.call 'updateMsgData', messages
+###
+messages = {
+  title: '追單'
+  msg: [
+    {
+      seq: 0
+      content: '韓國WEBPAT'
+    }
+    {
+      seq: 1
+      content: '台灣WEBPAT'
+    }
+  ]
+  modifiedAt: 2015-08-25
+}
+
+###

@@ -3,12 +3,15 @@
     <div class='container'>
       <div class='title'>標題<input id='title' value="{{messages.title}}" maxlength='20'/></div>
       {{#with messages}}
-        <div class='msg'>訊息一<textarea id='msg_1'  maxlength='40'>{{messages.msg_1}}</textarea></div>
-        <div class='msg'>訊息二<textarea id='msg_2'>{{messages.msg_2}}</textarea></div>
-        <div class='msg'>訊息三<textarea id='msg_3'>{{msg_3}}</textarea></div>
-        <div class='msg'>訊息四<textarea id='msg_4'>{{msg_4}}</textarea></div>
+        {{#each messages.msgs}}
+          <div class='msg'>訊息{{seq}}<textarea id='msg_{{seq}}' maxlength='40'>{{content}}</textarea></div>
+        {{/each}}
       {{/with}}
-        <div class='apply'><div id='btn'>套用</div></div>
+        <div class='controls'>
+          <div id='btn' class='remove'>移除</div>
+          <div id='btn' class='apply'>套用</div>
+          <div id='btn' class='add'>新增</div>
+        </div>
     </div>
   </div>
   {{>home}}

@@ -185,7 +185,7 @@ Meteor.methods
 
   updateMsgData: (messages) ->
     _id = Messages.findOne() || {}
-    Messages.update {}, {$set: messages}, {upsert:true}
+    Messages.update _id, {$set: messages}, {upsert:true}
     console.log ">>> message updated at #{this.connection?.clientAddress}"
 
 Meteor.startup ->
