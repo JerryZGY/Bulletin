@@ -1,6 +1,8 @@
 messages = null
 seq = 0
 
+TweenLite.ticker.useRAF true
+
 Template.editmsg.onRendered ->
   $('body').attr('class', 'editmsg')
   Meteor.subscribe 'messages', ->
@@ -41,15 +43,20 @@ Template.editmsg.helpers
 Template.editmsg.events
   'click .remove': ->
     if seq != 0
-      delete messages.msgs[seq]
-      seq--
-      messages.msgs.length = seq
-      Meteor.call 'updateMsgData', messages
+      TweenLite.fromTo $('.msg').last(), 0.5, {opacity: 1, height: 87}, {opacity: 0, height: 0, onComplete: ->
+        delete messages.msgs[seq]
+        seq--
+        messages.msgs.length = seq
+        Meteor.call 'updateMsgData', messages
+      }
 
   'click .add': ->
     messages.msgs[seq] = ''
     seq++
-    Meteor.call 'updateMsgData', messages
+    Meteor.call 'updateMsgData', messages, ->
+      setTimeout ->
+        TweenLite.fromTo $('.msg').last(), 0.5, {opacity: 0, height: 0}, {opacity: 1, height: 87}
+      , 1
 
   'click .apply': ->
     messages['title'] = $('#title').val()

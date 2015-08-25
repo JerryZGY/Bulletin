@@ -13,6 +13,7 @@ rD = (cAD - aD - bD) #restoreDuration
 
 
 TweenLite.ticker.useRAF true
+TweenLite.defaultOverwrite = 'allOnStart'
 TweenLite.defaultEase = Power4.easeOut
 
 progressAnimation = (duration = aD) ->
@@ -38,8 +39,8 @@ slideAnimation = ->
   if isSlideAnimationOn
     calibrateMsgData()
     TweenLite.fromTo msgDOM_Ary[0], 1, {opacity: 1, y: 0}, {opacity: 0, y: -200}
-    TweenLite.fromTo msgDOM_Ary[1], 1, {y: 200}, {y: 0}
-    TweenLite.fromTo msgDOM_Ary[2], 1, {opacity: 0, y: 400}, {opacity: 1, y: 200}
+    TweenLite.fromTo msgDOM_Ary[1], 1, {y: 200}, {y: 0, delay: 0.1}
+    TweenLite.fromTo msgDOM_Ary[2], 1, {opacity: 0, y: 400}, {opacity: 1, y: 200, delay: 0.2}
     calibrateMsgDOM()
     index++
     if index == data.length then index = 0
@@ -66,11 +67,12 @@ calibrateMsgDOM = (status) ->
       [msgDOM_Ary[0], msgDOM_Ary[1], msgDOM_Ary[2]] = [msgDOM_Ary[2], msgDOM_Ary[0], msgDOM_Ary[1]]
 
 iconFadeAnimation = (duration = aD) ->
-  TweenLite.to fadeDOM_Ary[0], duration, {opacity: 0.5, onComplete: fadeAnimation}
+  setTimeout(fadeAnimation, duration * 1000)
+  #TweenLite.to fadeDOM_Ary[0], duration, {opacity: 1, onComplete: fadeAnimation}
 
 fadeAnimation = ->
-  TweenLite.to $(fadeDOM_Ary[0]).parent(), rD, {opacity:0, onComplete: -> TweenLite.set fadeDOM_Ary[0], {opacity: 1}}
-  TweenLite.to $(fadeDOM_Ary[1]).parent(), rD, {opacity:1, onComplete: -> fadeInterval = setInterval(calibrateFadeInterval, 10)}
+  TweenLite.to $(fadeDOM_Ary[0]).parent(), rD, {opacity:0, ease: Power0.easeNone, onComplete: -> TweenLite.set fadeDOM_Ary[0], {opacity: 1}}
+  TweenLite.to $(fadeDOM_Ary[1]).parent(), rD, {opacity:1, ease: Power0.easeNone, onComplete: -> fadeInterval = setInterval(calibrateFadeInterval, 10)}
 
 calibrateFadeInterval = ->
   if moment().second() % cAD == 0

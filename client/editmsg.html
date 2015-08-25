@@ -4,7 +4,7 @@
       <div class='title'>標題<input id='title' value="{{messages.title}}" maxlength='20'/></div>
       {{#with messages}}
         {{#each content}}
-          <div class='msg'>訊息{{seq}}<textarea id='msg_{{seq}}' maxlength='40'>{{msg}}</textarea></div>
+          <div class='msg'>訊息{{plus seq 1}}<textarea id='msg_{{seq}}' maxlength='40'>{{msg}}</textarea></div>
         {{/each}}
       {{/with}}
         <div class='controls'>
