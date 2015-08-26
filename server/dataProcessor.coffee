@@ -166,8 +166,8 @@ updateRefreshCron = ->
 getPowerStatus = (cb) ->
   url = 'http://192.168.49.21:9200/powerstatus*/_search'
   request = {
-    from: 0,
-    size: 10,
+    from: 0
+    size: 10
     sort: {
         "@timestamp": "desc"
     }
@@ -180,24 +180,16 @@ getPowerStatus = (cb) ->
 
   HTTP.post url, options, (e, r) ->
     if e then return cb e
-    data = (JSON.parse r.content).hits.hits
-    real_1 = null
-    real_2 = null
-    real_3 = null
-    data.forEach (item) ->
-      kwz = item['_source']['kwz']
-      switch item['_source']['cmd']
-        when 'real_1'
-          real_1 = kwz
-        when 'real_2'
-          real_2 = kwz
-        when 'real_3'
-          real_3 = kwz
+    data = (JSON.parse r.content).hits.hits.map (v) ->
+      return {
+        cmd: v['_source']['cmd']
+        kwz: v['_source']['kwz']
+      }
+    data = _.groupBy data, 'cmd'
     data = {
-      real_1: real_1
-      real_2: real_2
-      real_3: real_3
-      modifiedAt: new Date()
+      real_1: data['real_1'][0]['kwz']
+      real_2: data['real_2'][0]['kwz']
+      real_3: data['real_3'][0]['kwz']
     }
     cb null, data
 
