@@ -5,6 +5,8 @@ TweenLite.ticker.useRAF false
 
 Template.editmsg.onRendered ->
   $('body').attr('class', 'editmsg')
+  Meteor.subscribe 'weatherData'
+  Meteor.subscribe 'power'
   Meteor.subscribe 'messages', ->
     messages = Messages.findOne()
     if !messages
@@ -16,6 +18,8 @@ Template.editmsg.onRendered ->
       seq = messages.msgs.length
 
 Template.editmsg.helpers
+  power: ->
+    return Power.findOne()
   messages: ->
     return Messages.findOne()
   content: ->
@@ -31,6 +35,8 @@ Template.editmsg.helpers
     return Settings.refreshTempAndHumiFreq
   refreshWeatherFreq: ->
     return Settings.refreshWeatherFreq
+  refreshPowerFreq: ->
+    return Settings.refreshPowerFreq
   currentAnimateDuration: ->
     return Settings.currentAnimateDuration
   animateDuration: ->
@@ -56,7 +62,7 @@ Template.editmsg.events
     Meteor.call 'updateMsgData', messages, ->
       setTimeout ->
         TweenLite.fromTo $('.msg').last(), 0.5, {opacity: 0, height: 0}, {opacity: 1, height: 87}
-      , 1
+      , 20
 
   'click .apply': ->
     messages['title'] = $('#title').val()

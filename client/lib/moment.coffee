@@ -7,12 +7,12 @@ Template.registerHelper 'plus', (a, b) ->
 
 Template.registerHelper 'triplePlus', (a, b, c) ->
   if a? && b? && c?
-    return Math.round((a + b + c) * 10) / 10
+    return (Math.round((a + b + c) * 10) / 10) + 'kwz'
   else
     return ''
 
 Template.registerHelper 'formatFloat', (value) ->
   if value?
-    Math.round(value * 10) / 10
+    (Math.round(value * 10) / 10) + 'kwz'
   else
     return ''

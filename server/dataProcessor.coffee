@@ -2,7 +2,7 @@ cheerio = Meteor.npmRequire 'cheerio'
 async = Meteor.npmRequire 'async'
 refreshWeatherFreq = Settings.refreshWeatherFreq
 refreshTempAndHumiFreq = Settings.refreshTempAndHumiFreq
-refreshPowerStatus = Settings.refreshPowerStatus
+refreshPowerFreq = Settings.refreshPowerFreq
 
 weatherText = {
   0:  {text: "tornado", current: "龍選風"}
@@ -151,7 +151,7 @@ updateRefreshCron = ->
     name: name_power
     schedule: (parser) ->
       console.log "*** schedule: #{name_power} is scheduled"
-      parser.text refreshPowerStatus
+      parser.text refreshPowerFreq
     job: ->
       console.log "*** schedule: #{name_power} is triggered"
       Meteor.call 'refreshPowerStatus', (e) ->
@@ -162,7 +162,7 @@ getPowerStatus = (cb) ->
   url = 'http://192.168.49.21:9200/powerstatus*/_search'
   request = {
     from: 0,
-    size: 3,
+    size: 10,
     sort: {
         "@timestamp": "desc"
     }
@@ -192,6 +192,7 @@ getPowerStatus = (cb) ->
       real_1: real_1
       real_2: real_2
       real_3: real_3
+      modifiedAt: new Date()
     }
     cb null, data
 
