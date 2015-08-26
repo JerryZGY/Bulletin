@@ -122,6 +122,11 @@ getWeatherImageUrl = (text, cb) ->
     imageUrl = parsePhotosDataToUrl data
     cb null, imageUrl
 
+startupRefresh = ->
+  Meteor.call 'refreshWeather'
+  Meteor.call 'refreshTempAndHumi'
+  Meteor.call 'refreshPowerStatus'
+
 updateRefreshCron = ->
   SyncedCron.stop()
   name_weather = 'refreshWeather'
@@ -198,6 +203,7 @@ getPowerStatus = (cb) ->
 
 Meteor.methods
   refreshPowerStatus: (cb) ->
+    console.log ">>> call refreshPowerStatus"
     getPowerStatus (e, r) ->
       if e then return cb e
       _id = Power.findOne() || {}
@@ -246,4 +252,5 @@ Meteor.methods
     console.log ">>> message updated at #{this.connection?.clientAddress}"
 
 Meteor.startup ->
+  startupRefresh()
   updateRefreshCron()
