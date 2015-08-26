@@ -1,16 +1,19 @@
 <template name='editmsg'>
   <div class='editor'>
     <div class='container'>
-      <div class='title'>標題<input id='title' value="{{messages.title}}" maxlength='20'/></div>
+      <div class='title'>固定訊息<input id='title' value="{{messages.title}}" maxlength='20'/></div>
       {{#with messages}}
         {{#each content}}
-          <div class='msg'>訊息{{plus seq 1}}<textarea id='msg_{{seq}}' maxlength='40'>{{msg}}</textarea></div>
+          <div class='msg'>動態訊息{{plus seq 1}}<textarea id='msg_{{seq}}' maxlength='40'>{{msg}}</textarea></div>
         {{/each}}
       {{/with}}
         <div class='controls'>
           <div id='btn' class='remove'>移除</div>
           <div id='btn' class='apply'>套用</div>
           <div id='btn' class='add'>新增</div>
+        </div>
+        <div class='tip'>
+          ＊動態訊息限兩行
         </div>
     </div>
   </div>

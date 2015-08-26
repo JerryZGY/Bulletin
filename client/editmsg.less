@@ -13,15 +13,19 @@ body.editmsg {
 
   .editor {
     width: 360px;
-    background-color: #50638D;
+    background-color: #14171A;
     z-index: 1;
 
     .container {
       .flex-display();
-      color: #F0E6E6;
-      font-size: 20px;
+      color: #C4C7C9;
+      font-size: 25px;
       .flex-direction(column);
       padding: 18px 13px 0 13px;
+
+      .tip {
+        font-size: 15px;
+      }
 
       .msg {
         .flex(none);
@@ -40,7 +44,7 @@ body.editmsg {
           color: #F0E6E6;
           font-size: 20px;
           resize: none;
-          background-color: #60739D;
+          background-color: #343C45;
           overflow: hidden;
         }
 
@@ -50,18 +54,19 @@ body.editmsg {
 
         &.controls {
           .flex-display();
+          margin: 10px 0px;
           text-align: center;
-          margin-bottom: 10px;
 
           #btn {
             .flex(1);
+            margin: 0 10px;
             color: #F0E6E6;
             cursor: pointer;
             font-size: 20px;
             line-height: 40px;
             border-radius: 6px;
             border: 1px solid #4C5F89;
-            background-color: #60739D;
+            background-color: #343C45
           }
 
           #btn:hover {

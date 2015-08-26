@@ -79,7 +79,7 @@ calibrateMsgData = ->
   if offset_1 == data.length then offset_1 = 0
   offset_2 = offset_1 + 1
   if offset_2 == data.length then offset_2 = 0
-  $(msgDOM_Ary[0]).text(data[index])
+  if data.length > 0 then $(msgDOM_Ary[0]).text(data[index]) else $(msgDOM_Ary[0]).text('')
   if data.length > 1 then $(msgDOM_Ary[1]).text(data[offset_1]) else $(msgDOM_Ary[1]).text('')
   if data.length > 2 then $(msgDOM_Ary[2]).text(data[offset_2]) else $(msgDOM_Ary[2]).text('')
 
