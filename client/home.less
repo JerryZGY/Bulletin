@@ -360,6 +360,39 @@ html {
         height: 100px;
         position: absolute;
         background: rgba(0, 0, 0, 0.5);
+        .flex-display();
+
+        div {
+          .flex(none);
+          width: 100px;
+          height: 100px;
+          background-size: 80px;
+          background-position: center;
+          background-repeat: no-repeat;
+
+          &.harc {
+            background-image: url('material/harc.png');
+          }
+
+          &.light {
+            background-image: url('material/light.png');
+          }
+
+          &.machine {
+            background-image: url('material/machine.png');
+          }
+
+          &.total {
+            background-image: url('material/total.png');
+          }
+        }
+
+        span {
+          .flex(1);
+          font-size: 40px;
+          line-height: 100px;
+          text-align: center;
+        }
       }
     }
   }

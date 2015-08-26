@@ -1,7 +1,7 @@
 messages = null
 seq = 0
 
-TweenLite.ticker.useRAF true
+TweenLite.ticker.useRAF false
 
 Template.editmsg.onRendered ->
   $('body').attr('class', 'editmsg')

@@ -4,3 +4,15 @@ Template.registerHelper 'formatDate', (date, format) ->
 
 Template.registerHelper 'plus', (a, b) ->
   a + b
+
+Template.registerHelper 'triplePlus', (a, b, c) ->
+  if a? && b? && c?
+    return Math.round((a + b + c) * 10) / 10
+  else
+    return ''
+
+Template.registerHelper 'formatFloat', (value) ->
+  if value?
+    Math.round(value * 10) / 10
+  else
+    return ''

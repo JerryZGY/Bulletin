@@ -2,6 +2,7 @@ cheerio = Meteor.npmRequire 'cheerio'
 async = Meteor.npmRequire 'async'
 refreshWeatherFreq = Settings.refreshWeatherFreq
 refreshTempAndHumiFreq = Settings.refreshTempAndHumiFreq
+refreshPowerStatus = Settings.refreshPowerStatus
 
 weatherText = {
   0:  {text: "tornado", current: "龍選風"}
@@ -144,9 +145,64 @@ updateRefreshCron = ->
       console.log "*** schedule: #{name_tempandhumi} is triggered"
       Meteor.call 'refreshTempAndHumi', (e) ->
         if e then console.log e
+
+  name_power = 'refreshPowerStatus'
+  SyncedCron.add
+    name: name_power
+    schedule: (parser) ->
+      console.log "*** schedule: #{name_power} is scheduled"
+      parser.text refreshPowerStatus
+    job: ->
+      console.log "*** schedule: #{name_power} is triggered"
+      Meteor.call 'refreshPowerStatus', (e) ->
+        if e then console.log e
   SyncedCron.start()
 
+getPowerStatus = (cb) ->
+  url = 'http://192.168.49.21:9200/powerstatus*/_search'
+  request = {
+    from: 0,
+    size: 3,
+    sort: {
+        "@timestamp": "desc"
+    }
+  }
+
+  options =
+    content: JSON.stringify(request)
+    headers:
+      "Content-Type": "application/json;charset=utf-8"
+
+  HTTP.post url, options, (e, r) ->
+    if e then return cb e
+    data = (JSON.parse r.content).hits.hits
+    real_1 = null
+    real_2 = null
+    real_3 = null
+    data.forEach (item) ->
+      kwz = item['_source']['kwz']
+      switch item['_source']['cmd']
+        when 'real_1'
+          real_1 = kwz
+        when 'real_2'
+          real_2 = kwz
+        when 'real_3'
+          real_3 = kwz
+    data = {
+      real_1: real_1
+      real_2: real_2
+      real_3: real_3
+    }
+    cb null, data
+
 Meteor.methods
+  refreshPowerStatus: (cb) ->
+    getPowerStatus (e, r) ->
+      if e then return cb e
+      _id = Power.findOne() || {}
+      Power.update _id, {$set: r}, {upsert:true}
+      cb? null
+
   refreshTempAndHumi: (cb) ->
     console.log ">>> call refreshTempAndHumi"
     getTemperatureAndHumidity (e, r) ->

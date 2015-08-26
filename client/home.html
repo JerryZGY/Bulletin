@@ -75,6 +75,22 @@
       </div>
     </div>
     <div class='statusbar'>
+      <div class='harc'></div>
+      <span>
+        {{formatFloat power.real_1}}kwz
+      </span>
+      <div class='light'></div>
+      <span>
+        {{formatFloat power.real_2}}kwz
+      </span>
+      <div class='machine'></div>
+      <span>
+        {{formatFloat power.real_3}}kwz
+      </span>
+      <div class='total'></div>
+      <span>
+        {{triplePlus power.real_1 power.real_2 power.real_3}}kwz
+      </span>
     </div>
   </div>
 </template>

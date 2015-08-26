@@ -12,9 +12,38 @@ bD = Settings.bufferDuration #bufferDuration
 rD = (cAD - aD - bD) #restoreDuration
 
 
-TweenLite.ticker.useRAF true
+TweenLite.ticker.useRAF false
 TweenLite.defaultOverwrite = 'allOnStart'
 TweenLite.defaultEase = Power4.easeOut
+
+Template.home.onCreated ->
+  Meteor.subscribe 'power'
+  Meteor.subscribe 'weatherdata', ->
+    initWeatherIcon()
+    updateBackground WeatherData.findOne().imageUrl
+    WeatherData.find().observe
+      changed: (newDoc, oldDoc) ->
+        if newDoc.imageUrl != oldDoc.imageUrl then updateBackground newDoc.imageUrl
+        if newDoc.weatherName != oldDoc.weatherName then updateWeatherIcon oldDoc.weatherName, newDoc.weatherName
+
+Template.home.onRendered ->
+  updateClock()
+  initFadeAnimation()
+  Meteor.subscribe 'messages', ->
+    data = Messages.findOne().msgs
+    initSlideAnimation()
+    Messages.find().observe
+      changed: ->
+        data = Messages.findOne().msgs
+        initSlideAnimation()
+
+Template.home.helpers
+  power: ->
+    return Power.findOne()
+  weatherData: ->
+    return WeatherData.findOne()
+  messages: ->
+    return Messages.findOne()
 
 progressAnimation = (duration = aD) ->
   if isSlideAnimationOn
@@ -108,32 +137,6 @@ initSlideAnimation = ->
   TweenLite.set msgDOM_Ary[1], {opacity: 1, y: 200}
   TweenLite.set msgDOM_Ary[2], {opacity: 0, y: 400}
   progressAnimation(duration)
-
-Template.home.onCreated ->
-  Meteor.subscribe 'weatherdata', ->
-    initWeatherIcon()
-    updateBackground WeatherData.findOne().imageUrl
-    WeatherData.find().observe
-      changed: (newDoc, oldDoc) ->
-        if newDoc.imageUrl != oldDoc.imageUrl then updateBackground newDoc.imageUrl
-        if newDoc.weatherName != oldDoc.weatherName then updateWeatherIcon oldDoc.weatherName, newDoc.weatherName
-
-Template.home.onRendered ->
-  updateClock()
-  initFadeAnimation()
-  Meteor.subscribe 'messages', ->
-    data = Messages.findOne().msgs
-    initSlideAnimation()
-    Messages.find().observe
-      changed: ->
-        data = Messages.findOne().msgs
-        initSlideAnimation()
-
-Template.home.helpers
-  weatherData: ->
-    return WeatherData.findOne()
-  messages: ->
-    return Messages.findOne()
 
 initWeatherIcon = ->
   $('.weatherIcon').addClass "#{WeatherData.findOne().weatherName}"

@@ -3,3 +3,6 @@ Meteor.publish 'weatherdata', ->
 
 Meteor.publish 'messages', ->
   Messages.find()
+
+Meteor.publish 'power', ->
+  Power.find()
