@@ -11,7 +11,7 @@ body.editmsg {
   }
 
   .editor {
-    width: 360px;
+    width: 500px;
     background-color: #14171A;
     z-index: 1;
 
@@ -26,57 +26,32 @@ body.editmsg {
         font-size: 15px;
       }
 
-      .msg {
+      .row {
         .flex(none);
-        height: 87px;
+        height: 50px;
         overflow: hidden;
       }
 
       div {
         .flex(1);
+        position: relative;
+        margin-bottom: 10px;
 
         textarea, input {
+          right: 0;
           border: 0;
-          width: 100%;
+          resize: none;
+          width: 334px;
           height: 46px;
-          margin: 8px 0;
           color: #F0E6E6;
           font-size: 20px;
-          resize: none;
-          background-color: #343C45;
           overflow: hidden;
+          position: absolute;
+          background-color: #343C45;
         }
 
         &.title input {
           height: 23px;
-        }
-
-        &.controls {
-          .flex-display();
-          margin: 10px 0px;
-          text-align: center;
-
-          #btn {
-            .flex(1);
-            margin: 0 10px;
-            color: #F0E6E6;
-            cursor: pointer;
-            font-size: 20px;
-            line-height: 40px;
-            border-radius: 6px;
-            border: 1px solid #4C5F89;
-            background-color: #343C45
-          }
-
-          #btn:hover {
-            border: 1px solid #384B75;
-            background-color: #4C5F89;
-          }
-
-          #btn:active {
-            border: 1px solid #384B75;
-            background-color: #60739D;
-          }
         }
       }
     }
@@ -84,7 +59,7 @@ body.editmsg {
 
   .settings {
     z-index: 1;
-    left: 725px;
+    left: 865px;
     width: 300px;
     height: 640px;
     position: absolute;

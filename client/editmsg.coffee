@@ -7,30 +7,25 @@ Template.editmsg.onRendered ->
   $('body').attr('class', 'editmsg')
   Meteor.subscribe 'weatherData'
   Meteor.subscribe 'power'
-  Meteor.subscribe 'messages', ->
-    messages = Messages.findOne()
-    if !messages
-      messages = {
-        title: ''
-        msgs: []
-      }
-    else
-      seq = messages.msgs.length
+  Meteor.subscribe 'messages'
 
 Template.editmsg.helpers
-  power: ->
-    return Power.findOne()
-  messages: ->
-    return Messages.findOne()
-  content: ->
-    msgs = {}
-    if Messages.findOne()
-      msgs = Messages.findOne().msgs.map (v, i)->
-        return {
-          msg: v
-          seq: i
-        }
-    return msgs
+  title: ->
+    return Messages.findOne()?.title
+  msgs: ->
+    if data = Messages.findOne()?.msgs
+      data = data.map (v, i) ->
+        return { msg: v, seq: i }
+      total = 0
+      if data.length < 4
+        total = 4
+      else
+        total = data.length + 1
+      i = data.length
+      while i < total
+        data.push { msg: '', seq: i }
+        i++
+    return data
   refreshTempAndHumiFreq: ->
     return Settings.refreshTempAndHumiFreq
   refreshWeatherFreq: ->
@@ -45,28 +40,20 @@ Template.editmsg.helpers
     return Settings.bufferDuration
   weatherData: ->
     return WeatherData.findOne()
+  power: ->
+    return Power.findOne()
 
 Template.editmsg.events
-  'click .remove': ->
-    if seq != 0
-      TweenLite.fromTo $('.msg').last(), 0.5, {opacity: 1, height: 87}, {opacity: 0, height: 0, onComplete: ->
-        delete messages.msgs[seq]
-        seq--
-        messages.msgs.length = seq
-        Meteor.call 'updateMsgData', messages
-      }
+  'blur input': ->
+    Meteor.call 'updateMsgData', {title: $('#title').val()}
 
-  'click .add': ->
-    messages.msgs[seq] = ''
-    seq++
-    Meteor.call 'updateMsgData', messages, ->
-      setTimeout ->
-        TweenLite.fromTo $('.msg').last(), 0.5, {opacity: 0, height: 0}, {opacity: 1, height: 87}
-      , 20
-
-  'click .apply': ->
-    messages['title'] = $('#title').val()
-    messages.msgs = messages.msgs.map (v, i) ->
-      return $("#msg_#{i}").val()
-    messages['modifiedAt'] = new Date()
-    Meteor.call 'updateMsgData', messages
+  'blur textarea': ->
+    msgs = []
+    $('.row > .msg').each ->
+      value = $(this).val()
+      if value != '' then msgs.push value
+    i = msgs.length - 1
+    while i < 4
+      i++
+      $("##{i}").val('')
+    Meteor.call 'updateMsgData', {msgs: msgs}
