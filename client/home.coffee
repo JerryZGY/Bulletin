@@ -28,7 +28,7 @@ Template.home.onCreated ->
 
 Template.home.onRendered ->
   updateClock()
-  initFadeAnimation()
+  #initFadeAnimation()
   Meteor.subscribe 'messages', ->
     data = Messages.findOne().msgs
     initSlideAnimation()
