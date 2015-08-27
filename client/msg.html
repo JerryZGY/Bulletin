@@ -1,0 +1,14 @@
+<template name='msg'>
+  <div class='editor'>
+    <div class='container'>
+      <div class='title'>固定訊息<input id='title' value="{{title}}" maxlength='20'/></div>
+        {{#each msgs}}
+          <div class='row'>動態訊息{{plus seq 1}}<textarea id='{{seq}}' class='msg' maxlength='40'>{{msg}}</textarea></div>
+        {{/each}}
+        <div class='tip'>
+          ＊動態訊息內容限兩行
+        </div>
+    </div>
+  </div>
+  {{>home}}
+</template>

@@ -1,0 +1,59 @@
+@import 'lib/mixins.import.less';
+
+body.msg {
+  .flex-display();
+
+  .bulletin {
+    transform: scale(0.3334);
+    position: absolute;
+    transform-origin: 0 0;
+    z-index: 0;
+  }
+
+  .editor {
+    width: 500px;
+    background-color: #14171A;
+    z-index: 1;
+
+    .container {
+      .flex-display();
+      color: #C4C7C9;
+      font-size: 25px;
+      .flex-direction(column);
+      padding: 18px 13px 0 13px;
+
+      .tip {
+        font-size: 15px;
+      }
+
+      .row {
+        .flex(none);
+        height: 47px;
+        overflow: hidden;
+      }
+
+      div {
+        .flex(1);
+        position: relative;
+        margin-bottom: 10px;
+
+        textarea, input {
+          right: 0;
+          border: 0;
+          resize: none;
+          width: 334px;
+          height: 46px;
+          color: #F0E6E6;
+          font-size: 20px;
+          overflow: hidden;
+          position: absolute;
+          background-color: #343C45;
+        }
+
+        &.title input {
+          height: 23px;
+        }
+      }
+    }
+  }
+}
