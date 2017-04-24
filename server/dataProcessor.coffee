@@ -125,7 +125,6 @@ getWeatherImageUrl = (text, cb) ->
 startupRefresh = ->
   Meteor.call 'refreshWeather'
   Meteor.call 'refreshTempAndHumi'
-  Meteor.call 'refreshPowerStatus'
 
 updateRefreshCron = ->
   SyncedCron.stop()
@@ -149,17 +148,6 @@ updateRefreshCron = ->
     job: ->
       console.log "*** schedule: #{name_tempandhumi} is triggered"
       Meteor.call 'refreshTempAndHumi', (e) ->
-        if e then console.log e
-
-  name_power = 'refreshPowerStatus'
-  SyncedCron.add
-    name: name_power
-    schedule: (parser) ->
-      console.log "*** schedule: #{name_power} is scheduled"
-      parser.text refreshPowerFreq
-    job: ->
-      console.log "*** schedule: #{name_power} is triggered"
-      Meteor.call 'refreshPowerStatus', (e) ->
         if e then console.log e
   SyncedCron.start()
 

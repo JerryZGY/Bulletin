@@ -1,92 +1,94 @@
 <head>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <title>Bulletin</title>
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css" />
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
 </head>
 
 <template name='home'>
-  <div class='bulletin'>
-    <div class='background onloaded'></div>
-    <div class='background preload'></div>
-    <div class='container clock'>
-      <div class='graph'>
-        <div class='ring'>
-          <div class='hour'></div>
-          <div class='minute'></div>
-          <div class='second'></div>
-          <div class='center'></div>
+  <div class='column1'>
+    <div class='bulletin'>
+      <div class='background onloaded'></div>
+      <div class='background preload'></div>
+      <div class='container clock'>
+        <div class='graph'>
+          <div class='ring'>
+            <div class='hour'></div>
+            <div class='minute'></div>
+            <div class='second'></div>
+            <div class='center'></div>
+          </div>
+        </div>
+        <div class='worth'>
+          <span class='date'></span>
+          <span class='weekday'></span>
+          <span class='times'></span>
         </div>
       </div>
-      <div class='worth'>
-        <span class='date'></span>
-        <span class='weekday'></span>
-        <span class='times'></span>
-      </div>
-    </div>
-    <div class='container data'>
-      <div class='graph'>
-        <div class='weatherIcon'></div>
-        <div class='weatherName'>{{weatherData.weatherCurrentName}}</div>
-        <div class='extraDesc'>
-          <div class='highest'></div>
-          <span>
+      <div class='container data'>
+        <div class='graph'>
+          <div class='weatherIcon'></div>
+          <div class='weatherName'>{{weatherData.weatherCurrentName}}</div>
+          <div class='extraDesc'>
+            <div class='highest'></div>
+            <span>
             {{weatherData.highest}}℃
           </span>
-          <div class='lowest'></div>
-          <span>
+            <div class='lowest'></div>
+            <span>
             {{weatherData.lowest}}℃
           </span>
+          </div>
         </div>
-      </div>
-      <div class='worth'>
-        <div class='subtitle'>
-          <div class='icon'></div>
-          <span>室外</span>
-          <span>室內</span>
-          <span>機房</span>
-        </div>
-        <div class='temperature'>
-          <div class='icon'></div>
-          <span>&nbsp;{{weatherData.outsideTemp}}℃</span>
-          <span>&nbsp;{{weatherData.insideTemp}}℃</span>
-          <span>&nbsp;{{weatherData.extraTemp}}℃</span>
-        </div>
-        <div class='humidity'>
-          <div class='icon'></div>
-          <span>&nbsp;{{weatherData.outsideHumi}}%</span>
-          <span>&nbsp;{{weatherData.insideHumi}}%</span>
-          <span>&nbsp;{{weatherData.extraHumi}}%</span>
+        <div class='worth'>
+          <div class='subtitle'>
+            <div class='icon'></div>
+            <span>室外</span>
+            <span>室內</span>
+            <span>&nbsp;</span>
+          </div>
+          <div class='temperature'>
+            <div class='icon'></div>
+            <span>&nbsp;{{weatherData.outsideTemp}}℃</span>
+            <span>&nbsp;{{weatherData.insideTemp}}℃</span>
+            <span>&nbsp;</span>
+          </div>
+          <div class='humidity'>
+            <div class='icon'></div>
+            <span>&nbsp;{{weatherData.outsideHumi}}%</span>
+            <span>&nbsp;{{weatherData.insideHumi}}%</span>
+            <span>&nbsp;</span>
+          </div>
         </div>
       </div>
     </div>
-    <div class='container message'>
-      <div class='title'>
-        <div class='icon'></div>
-        <div class='word'>{{messages.title}}</div>
+  </div>
+  <div class='column2'>
+    <div id='slickMsg' class='msg'>
+      <div class='msgs'>
+        <div>售本商辦</div>
+        <div>11號8樓之1</div>
+        <div>建約38.5坪</div>
+        <div></div>
+        <div>意者請來電</div>
+        <div>0 3 - 4 0 2 1 1 1 1</div>
       </div>
-      <div class='content'>
-        <span class='msg1'></span>
-        <span class='msg2'></span>
-        <span class='msg3'></span>
-        <div class='progressBar'></div>
+      <div class='msgs'>
+        <div>租辦公室</div>
+        <div>附辦公家具</div>
+        <div>小坪數</div>
+        <div>請洽:名格建設</div>
+        <div>鄭小姐</div>
+        <div>0 3 - 4 9 4 2 2 8 9</div>
       </div>
     </div>
-    <div class='statusbar'>
-      <div class='harc'></div>
-      <span>
-        {{formatFloat power.real_1}}
-      </span>
-      <div class='light'></div>
-      <span>
-        {{formatFloat power.real_2}}
-      </span>
-      <div class='machine'></div>
-      <span>
-        {{formatFloat power.real_3}}
-      </span>
-      <div class='total'></div>
-      <span>
-        {{triplePlus power.real_1 power.real_2 power.real_3}}
-      </span>
+    <div class='img'>
+      <div id='slick'>
+        <div><img src="/img/01.png" /></div>
+        <div><img src="/img/02.png" /></div>
+        <div><img src="/img/03.png" /></div>
+        <div><img src="/img/04.png" /></div>
+      </div>
     </div>
   </div>
 </template>

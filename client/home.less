@@ -12,11 +12,52 @@ html {
 
   body {
     margin: 0;
-    overflow-x: hidden;
+    overflow: hidden;
+    width: 1920px;
+    height: 1080px;
+
+    .column1, .column2 { min-height:100%; float:left; }
+    .column1 {
+      width: 640px;
+    }
+    .column2 {
+      width: 1280px;
+      height: 1080px;
+      background-image: url('background/right-01.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+
+      .msg, .img { min-height:100%; float:left; width: 640px;}
+      .msg {
+        font-size: 60px;
+        font-weight : bold;
+        text-align: justify;
+        color:white;
+
+        .msgs div {
+          margin:0 30px;
+          text-shadow: 8px 0px 0px rgba(71, 71, 71, 0.71);
+        }
+        .msgs div:after {
+          content: "";
+          display: inline-block;
+          width: 100%;
+        }
+      }
+      .msgs:first-letter {
+        font-size: 200%;
+        margin-right: 3px;
+      }
+      .img {
+        background-color:rgba(0, 0, 0, 0.5);
+        height: 100%;
+        #slick { margin: 76px 0; }
+      }
+    }
 
     .bulletin {
-      width: 1080px;
-      height: 1920px;
+      width: 640px;
+      height: 1080px;
       position: relative;
 
       .background {
@@ -41,9 +82,9 @@ html {
       }
 
       .container {
-        width: 1000px;
+        width: 560px;
         height: 500px;
-        padding: 53px 40px 0 40px;
+        padding: 26.67px 40px 0 40px;
       }
 
       .clock {
@@ -52,14 +93,15 @@ html {
 
         .graph {
           .flex(1);
+            margin-top: 120px;
 
           .ring {
-            width: 452px;
-            height: 452px;
+            width: 226px;
+            height: 226px;
             position: relative;
             border-radius: 50%;
-            border: 24px solid #FFF;
-            box-shadow: 0 3px 24px rgba(34, 34, 34, 0.3), inset 0 3px 24px rgba(34, 34, 34, 0.3);
+            border: 12px solid #FFF;
+            box-shadow: 0 3px 12px rgba(34, 34, 34, 0.3), inset 0 3px 12px rgba(34, 34, 34, 0.3);
 
             div {
               top: 50%;
@@ -69,32 +111,32 @@ html {
               background-color: #FFF;
               position: absolute;
               .transform-origin(50% 100%);
-              box-shadow: 0 3px 24px rgba(34, 34, 34, 0.3);
+              box-shadow: 0 3px 12px rgba(34, 34, 34, 0.3);
             }
 
             .hour {
-              padding: 12px 0 12px 25%;
-              margin: -12px 0 -12px -25%;
-              border-radius: 12px 0 0 12px;
+              padding: 6px 0 6px 25%;
+              margin: -6px 0 -6px -25%;
+              border-radius: 6px 0 0 6px;
               .transform-origin(100% 50%);
             }
 
             .minute {
-              padding: 40% 9px 0 9px;
-              margin: -40% -9px 0 -9px;
-              border-radius: 9px 9px 0 0;
+              padding: 40% 4.5px 0 4.5px;
+              margin: -40% -4.5px 0 -4.5px;
+              border-radius: 4.5px 4.5px 0 0;
             }
 
             .second {
-              padding: 40% 3px 0 3px;
-              margin: -40% -3px 0 -3px;
+              padding: 40% 1.5px 0 1.5px;
+              margin: -40% -1.5px 0 -1.5px;
             }
 
             .center {
-              width: 36px;
-              height: 36px;
+              width: 18px;
+              height: 18px;
               border-radius: 50%;
-              margin: -18px 0 0 -18px;
+              margin: -9px 0 0 -9px;
             }
           }
         }
@@ -119,7 +161,7 @@ html {
           span {
             .flex(1);
             color: #FFF;
-            font-size: 65px;
+            font-size: 40px;
             text-align: center;
           }
         }
@@ -138,7 +180,7 @@ html {
           .flex-direction(column);
 
           .weatherIcon {
-            height: 300px;
+            height: 160px;
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
@@ -175,14 +217,14 @@ html {
           }
 
           .weatherName {
-            font-size: 65px;
-            line-height: 75px;
+            font-size: 45px;
+            line-height: 45px;
             text-align: center;
-            margin: 10px 0;
+            margin: 20px 0;
           }
 
           .extraDesc {
-            width: 70%;
+            width: 80%;
             .flex-display();
             margin: 0px auto;
             position: relative;
@@ -204,7 +246,7 @@ html {
 
             span {
               .flex(1);
-              font-size: 45px;
+              font-size: 35px;
             }
           }
         }
@@ -217,7 +259,7 @@ html {
           span {
             .flex(1);
             color: #FFF;
-            font-size: 65px;
+            font-size: 35px;
             line-height: 60px;
           }
 
@@ -231,7 +273,7 @@ html {
             .icon {
               .flex(1);
               height: 80px;
-              background-size: 78px;
+              background-size: 60px;
               background-position: center 0;
               background-repeat: no-repeat;
             }
@@ -258,112 +300,6 @@ html {
               background-image: url('material/humidity.png');
             }
           }
-        }
-      }
-
-      .message {
-        bottom: 0;
-        color: #FFF;
-        height: 761px;
-        overflow: hidden;
-        position: absolute;
-
-        .title {
-          width: 1000px;
-          height: 150px;
-          .flex-display();
-          position: relative;
-
-          .icon {
-            .flex(none);
-            width: 80px;
-            height: 80px;
-            margin: 45px 0px;
-            background-size: contain;
-            background-image: url("material/message.png");
-          }
-
-          .word {
-            .flex(1);
-            height: 70px;
-            font-size: 70px;
-            text-align: left;
-            overflow: hidden;
-            line-height: 90px;
-            padding: 35px 0px 35px 20px;
-          }
-        }
-
-        .content {
-          width: 1000px;
-          height: 420px;
-          display: block;
-          font-size: 60px;
-          margin-top: 90px;
-          position: relative;
-
-          span {
-            opacity: 0;
-            width: 100%;
-            height: 140px;
-            display: block;
-            overflow: hidden;
-            position: absolute;
-            margin-bottom: 60px;
-            word-wrap: break-word;
-          }
-
-          .progressBar {
-            bottom: 0;
-            height: 0;
-            width: 10px;
-            left: -40px;
-            opacity: 0.5;
-            position: absolute;
-            background-color: #FFF;
-          }
-        }
-      }
-
-      .statusbar {
-        bottom: 0px;
-        color: #FFF;
-        width: 100%;
-        height: 100px;
-        position: absolute;
-        background: rgba(0, 0, 0, 0.5);
-        .flex-display();
-
-        div {
-          .flex(none);
-          width: 100px;
-          height: 100px;
-          background-size: 80px;
-          background-position: center;
-          background-repeat: no-repeat;
-
-          &.harc {
-            background-image: url('material/harc.png');
-          }
-
-          &.light {
-            background-image: url('material/light.png');
-          }
-
-          &.machine {
-            background-image: url('material/machine.png');
-          }
-
-          &.total {
-            background-image: url('material/total.png');
-          }
-        }
-
-        span {
-          .flex(1);
-          font-size: 40px;
-          line-height: 100px;
-          text-align: center;
         }
       }
     }

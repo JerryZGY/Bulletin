@@ -28,14 +28,8 @@ Template.home.onCreated ->
 
 Template.home.onRendered ->
   updateClock()
-  #initFadeAnimation()
-  Meteor.subscribe 'messages', ->
-    data = Messages.findOne().msgs
-    initSlideAnimation()
-    Messages.find().observe
-      changed: ->
-        data = Messages.findOne().msgs
-        initSlideAnimation()
+  slideMsg()
+  slideImg()
 
 Template.home.helpers
   power: ->
@@ -44,6 +38,26 @@ Template.home.helpers
     return WeatherData.findOne()
   messages: ->
     return Messages.findOne()
+
+slideMsg = ->
+  $('#slickMsg').slick({
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    vertical: true,
+    arrows: false,
+  });
+
+slideImg = ->
+  $('#slick').slick({
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    vertical: true,
+    arrows: false,
+  });
 
 progressAnimation = (duration = aD) ->
   if isSlideAnimationOn
