@@ -42,11 +42,16 @@ Template.home.helpers
 slideMsg = ->
   $('#slickMsg').slick({
     slidesToShow: 1,
-    slidesToScroll: 1,
+    slidesToScroll: -1,
     autoplay: true,
-    autoplaySpeed: 5000,
-    vertical: true,
+    autoplaySpeed: 8000,
+    # vertical: true,
     arrows: false,
+    draggable: false,
+    accessibility: false,
+    adaptiveHeight: true,
+    pauseOnFocus: false,
+    pauseOnHover: false,
   });
 
 slideImg = ->
@@ -54,9 +59,14 @@ slideImg = ->
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 5000,
-    vertical: true,
+    autoplaySpeed: 8000,
+    # vertical: true,
     arrows: false,
+    draggable: false,
+    accessibility: false,
+    adaptiveHeight: true,
+    pauseOnFocus: false,
+    pauseOnHover: false,
   });
 
 progressAnimation = (duration = aD) ->
