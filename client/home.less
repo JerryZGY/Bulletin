@@ -16,7 +16,7 @@ html {
     width: 1920px;
     height: 1080px;
 
-    .column1, .column2 { min-height:100%; float:left; }
+    .column1, .column2 { min-height:100%; float:left; box-shadow: inset 0px 0px 1px 1px rgba(0,0,0,0.75); }
     .column1 {
       width: 640px;
     }
@@ -26,7 +26,6 @@ html {
       background-image: url('background/right-01.png');
       background-size: cover;
       background-repeat: no-repeat;
-      box-shadow: inset 0px 0px 1px 1px rgba(0,0,0,0.75);
 
       .msg, .img { min-height:100%; float:left; width: 640px;}
       .msg {
@@ -35,9 +34,27 @@ html {
         text-align: justify;
         color:white;
 
+        .slick-list {
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          margin: auto;
+          position: absolute;
+        }
+        .msgs {
+          height: 680px;
+        }
         .msgs div {
           margin:0 30px;
+          height: 100px;
+          line-height: 100px;
+          vertical-align: text-top;
           text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
+          &:first-child {
+            height: 180px;
+            line-height: 180px;
+          }
         }
         .msgs div:after {
           content: "";
@@ -498,13 +515,6 @@ html {
         &.isloading {
           opacity: 0;
         }
-      }
-
-      .shadow {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        box-shadow: inset -9px 0px 5px 0px rgba(0,0,0,0.75);
       }
 
       .container {
