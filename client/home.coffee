@@ -10,7 +10,7 @@ cAD = Settings.currentAnimateDuration #currentAnimateDuration
 aD = Settings.animateDuration #animateDuration
 bD = Settings.bufferDuration #bufferDuration
 rD = (cAD - aD - bD) #restoreDuration
-
+slidedownadDisplayTimeout = 30 * 1000;
 
 TweenLite.ticker.useRAF false
 TweenLite.defaultOverwrite = 'allOnStart'
@@ -30,6 +30,7 @@ Template.home.onRendered ->
   updateClock()
   slideMsg()
   slideImg()
+  window.setTimeout(showSlide, slidedownadDisplayTimeout)
 
 Template.home.helpers
   power: ->
@@ -187,7 +188,7 @@ updateWeatherIcon = (oldDoc, newDoc) ->
 
 updateClock = ->
   now = moment()
-  dateStr = now.format('L')
+  dateStr = now.format('YYYY/MM/DD')
   weekdayStr = now.format('dddd')
   timeStr = now.format('a h:mm:ss')
   second = (now.seconds() + now.milliseconds() / 1000) * 6
@@ -200,3 +201,13 @@ updateClock = ->
   $('.weekday').text(weekdayStr)
   $('.times').text(timeStr)
   setTimeout(updateClock, 40)
+
+showSlide = ->
+  $(".slidedownadbg").removeClass("slideoutAnimation2").addClass("slideinAnimation2")
+  $(".slidedownad").removeClass("slideoutAnimation").addClass("slidedownAnimation")
+  window.setTimeout(hideSlide, 10 * 1000)
+
+hideSlide = ->
+  $(".slidedownad").addClass("slideoutAnimation").removeClass("slidedownAnimation")
+  $(".slidedownadbg").addClass("slideoutAnimation2").removeClass("slideinAnimation2")
+  window.setTimeout(showSlide, slidedownadDisplayTimeout)
