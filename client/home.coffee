@@ -30,7 +30,7 @@ Template.home.onRendered ->
   updateClock()
   slideMsg()
   slideImg()
-  window.setTimeout(showSlide, slidedownadDisplayTimeout)
+  # window.setTimeout(showSlide, slidedownadDisplayTimeout)
 
 Template.home.helpers
   power: ->
