@@ -16,3 +16,4 @@ momentjs:moment
 rzymek:moment-locale-zh-tw
 percolate:synced-cron
 udondan:slick
+iron:middleware-stack@1.1.0
